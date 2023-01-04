@@ -109,7 +109,7 @@ namespace AuraRevival
             //g.DrawLine(pen, new Point(coor.Rectangle.Location.X + 1, coor.Rectangle.Location.Y), new Point(coor.Rectangle.Location.X + 1, coor.Rectangle.Location.Y + 1));
 
             //废弃上面的方法，直接画矩形
-            g.DrawRectangle(pen, coor.Rectangle);
+            g.DrawRectangle(pen, coor.Rectangle); 
             g.Dispose();
             #endregion
 
