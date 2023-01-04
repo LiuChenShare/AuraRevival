@@ -90,7 +90,7 @@ namespace AuraRevival
 
             #region 上次点击的位置标绿
             Graphics g2 = panel1.CreateGraphics();
-            Pen pen2 = new Pen(Color.Green);
+            Pen pen2 = new Pen(Color.Green); 
 
             //废弃上面的方法，直接画矩形
             g2.DrawRectangle(pen2, CoorOld.Rectangle);
