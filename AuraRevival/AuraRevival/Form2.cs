@@ -33,7 +33,7 @@ namespace AuraRevival
         {
 
         }
-
+        
         private void button4_Click(object sender, EventArgs e)
         {
 
@@ -51,24 +51,15 @@ namespace AuraRevival
             Pen pen = new Pen(Color.Green);
             Coor coor = new Coor(1, 1);
 
-
             //循环绘制多条横线
-            for (int i = 0; i <= panel1.Height / padding; i++)
+            for (int i = 0; i <= panel1.Height; i = i + 25)
             {
-
-                //画线的方法，第一个参数为起始点X的坐标，第二个参数为起始
-
-                //点Y的坐标；第三个参数为终点X的坐标，第四个参数为终
-
-                //点Y的坐标；
-
-                g.DrawLine(pen, 0, padding * i, panel1.Width, padding * i);
-
+                g.DrawLine(pen, 0, i, panel1.Width, i);
             }
             //循环绘制多条竖线
-            for (int i = 0; i <= this.Width / padding; i++)
+            for (int i = 0; i <= panel1.Width; i = i + 25)
             {
-                g.DrawLine(pen, padding * i, 0, padding * i, panel1.Height);
+                g.DrawLine(pen, i, 0, i, panel1.Height);
             }
 
             //在地图(1,1)的位置放个图片
