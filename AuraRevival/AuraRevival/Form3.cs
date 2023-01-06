@@ -211,5 +211,15 @@ namespace AuraRevival
             FormRefresh();
         }
 
+        private void panel1_MouseUp(object sender, MouseEventArgs e)
+        {
+            base.OnMouseUp(e);
+            if (e.Button == MouseButtons.Right)
+            {
+                //contextMenuStrip1.Show(this, e.Location);
+                //contextMenuStrip1.Show(this,5,5);
+                contextMenuStrip1.Show((Control)sender, e.Location);
+            }
+        }
     }
 }
