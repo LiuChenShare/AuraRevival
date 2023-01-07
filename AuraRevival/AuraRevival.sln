@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31624.102
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuraRevival", "AuraRevival\AuraRevival.csproj", "{DD295DA3-3CAB-4568-8704-F0FFE6A0D80A}"
 EndProject
@@ -12,6 +12,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grains", "..\AuraRevivalBase\Grains\Grains.csproj", "{F4D1D4D0-24D5-4F87-A1A6-2690E6790079}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuraRevival.Core", "..\AuraRevivalBase\AuraRevival.Core\AuraRevival.Core.csproj", "{491902B0-76A2-43A4-9BF7-703CFED47E8A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuraRevival.Business", "..\AuraRevivalBase\AuraRevival.Business\AuraRevival.Business.csproj", "{69851AD0-2617-4EB9-98E2-8F0CE67A3127}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuraRevivalTest", "AuraRevivalTest\AuraRevivalTest.csproj", "{EE6F1005-3610-42FE-BD74-EE15D230272A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +39,14 @@ Global
 		{491902B0-76A2-43A4-9BF7-703CFED47E8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{491902B0-76A2-43A4-9BF7-703CFED47E8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{491902B0-76A2-43A4-9BF7-703CFED47E8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69851AD0-2617-4EB9-98E2-8F0CE67A3127}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69851AD0-2617-4EB9-98E2-8F0CE67A3127}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69851AD0-2617-4EB9-98E2-8F0CE67A3127}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69851AD0-2617-4EB9-98E2-8F0CE67A3127}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE6F1005-3610-42FE-BD74-EE15D230272A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE6F1005-3610-42FE-BD74-EE15D230272A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE6F1005-3610-42FE-BD74-EE15D230272A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE6F1005-3610-42FE-BD74-EE15D230272A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,6 +55,7 @@ Global
 		{DB6773BF-06CF-4DCF-8F27-22487CFDB425} = {4396821A-6624-4498-822B-8BFE41B4D05A}
 		{F4D1D4D0-24D5-4F87-A1A6-2690E6790079} = {4396821A-6624-4498-822B-8BFE41B4D05A}
 		{491902B0-76A2-43A4-9BF7-703CFED47E8A} = {4396821A-6624-4498-822B-8BFE41B4D05A}
+		{69851AD0-2617-4EB9-98E2-8F0CE67A3127} = {4396821A-6624-4498-822B-8BFE41B4D05A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {84032B5D-13A1-4140-A12D-062C33D8A32B}
