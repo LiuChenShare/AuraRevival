@@ -33,26 +33,26 @@ namespace AuraRevival
             this.panel_Top = new System.Windows.Forms.Panel();
             this.panel_Left = new System.Windows.Forms.Panel();
             this.panel_Fill = new System.Windows.Forms.Panel();
+            this.button8 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel_Right = new System.Windows.Forms.Panel();
             this.panel_Bottom = new System.Windows.Forms.Panel();
-            this.button8 = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.listView1 = new System.Windows.Forms.ListView();
             this.panel_Fill.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel_Bottom.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,7 +69,7 @@ namespace AuraRevival
             this.panel_Left.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel_Left.Location = new System.Drawing.Point(0, 31);
             this.panel_Left.Name = "panel_Left";
-            this.panel_Left.Size = new System.Drawing.Size(58, 670);
+            this.panel_Left.Size = new System.Drawing.Size(110, 609);
             this.panel_Left.TabIndex = 1;
             // 
             // panel_Fill
@@ -79,19 +79,26 @@ namespace AuraRevival
             this.panel_Fill.Controls.Add(this.button6);
             this.panel_Fill.Controls.Add(this.button5);
             this.panel_Fill.Controls.Add(this.button1);
-            this.panel_Fill.Controls.Add(this.button4);
-            this.panel_Fill.Controls.Add(this.button3);
-            this.panel_Fill.Controls.Add(this.button2);
             this.panel_Fill.Controls.Add(this.panel2);
             this.panel_Fill.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_Fill.Location = new System.Drawing.Point(58, 31);
+            this.panel_Fill.Location = new System.Drawing.Point(110, 31);
             this.panel_Fill.Name = "panel_Fill";
-            this.panel_Fill.Size = new System.Drawing.Size(792, 670);
+            this.panel_Fill.Size = new System.Drawing.Size(714, 609);
             this.panel_Fill.TabIndex = 2;
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(622, 252);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(75, 23);
+            this.button8.TabIndex = 9;
+            this.button8.Text = "归零";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(692, 254);
+            this.button7.Location = new System.Drawing.Point(643, 214);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(34, 23);
             this.button7.TabIndex = 8;
@@ -101,7 +108,7 @@ namespace AuraRevival
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(692, 196);
+            this.button6.Location = new System.Drawing.Point(643, 156);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(34, 23);
             this.button6.TabIndex = 7;
@@ -111,7 +118,7 @@ namespace AuraRevival
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(712, 225);
+            this.button5.Location = new System.Drawing.Point(663, 185);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(34, 23);
             this.button5.TabIndex = 6;
@@ -121,7 +128,7 @@ namespace AuraRevival
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(671, 225);
+            this.button1.Location = new System.Drawing.Point(622, 185);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(34, 23);
             this.button1.TabIndex = 5;
@@ -129,42 +136,12 @@ namespace AuraRevival
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(671, 162);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 4;
-            this.button4.Text = "button4";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(671, 120);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "button3";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(671, 80);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.Control;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.panel1);
-            this.panel2.Location = new System.Drawing.Point(47, 37);
+            this.panel2.Location = new System.Drawing.Point(3, 3);
             this.panel2.Margin = new System.Windows.Forms.Padding(0);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(603, 603);
@@ -185,28 +162,20 @@ namespace AuraRevival
             // panel_Right
             // 
             this.panel_Right.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel_Right.Location = new System.Drawing.Point(850, 31);
+            this.panel_Right.Location = new System.Drawing.Point(824, 31);
             this.panel_Right.Name = "panel_Right";
-            this.panel_Right.Size = new System.Drawing.Size(75, 670);
+            this.panel_Right.Size = new System.Drawing.Size(101, 609);
             this.panel_Right.TabIndex = 0;
             // 
             // panel_Bottom
             // 
+            this.panel_Bottom.Controls.Add(this.listView1);
+            this.panel_Bottom.Controls.Add(this.textBox1);
             this.panel_Bottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel_Bottom.Location = new System.Drawing.Point(0, 701);
+            this.panel_Bottom.Location = new System.Drawing.Point(0, 640);
             this.panel_Bottom.Name = "panel_Bottom";
-            this.panel_Bottom.Size = new System.Drawing.Size(925, 31);
+            this.panel_Bottom.Size = new System.Drawing.Size(925, 141);
             this.panel_Bottom.TabIndex = 1;
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(671, 292);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(75, 23);
-            this.button8.TabIndex = 9;
-            this.button8.Text = "归零";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // contextMenuStrip1
             // 
@@ -216,45 +185,63 @@ namespace AuraRevival
             this.toolStripMenuItem2,
             this.toolStripMenuItem4});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 98);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(173, 76);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Enabled = false;
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(172, 22);
+            this.toolStripMenuItem1.Text = "这是一个右键菜单";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(169, 6);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem3});
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(130, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(172, 22);
             this.toolStripMenuItem2.Text = "123";
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(97, 22);
             this.toolStripMenuItem3.Text = "321";
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(130, 22);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(172, 22);
             this.toolStripMenuItem4.Text = "123";
             // 
-            // toolStripSeparator1
+            // textBox1
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(127, 6);
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Location = new System.Drawing.Point(33, 7);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 21);
+            this.textBox1.TabIndex = 0;
             // 
-            // toolStripMenuItem1
+            // listView1
             // 
-            this.toolStripMenuItem1.Enabled = false;
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-            this.toolStripMenuItem1.Text = "这是一个右键菜单";
+            this.listView1.Location = new System.Drawing.Point(163, 7);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(750, 122);
+            this.listView1.TabIndex = 0;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
             // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(925, 732);
+            this.ClientSize = new System.Drawing.Size(925, 781);
             this.Controls.Add(this.panel_Fill);
             this.Controls.Add(this.panel_Right);
             this.Controls.Add(this.panel_Left);
@@ -265,6 +252,8 @@ namespace AuraRevival
             this.Shown += new System.EventHandler(this.Form2_Shown);
             this.panel_Fill.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            this.panel_Bottom.ResumeLayout(false);
+            this.panel_Bottom.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -278,9 +267,6 @@ namespace AuraRevival
         private System.Windows.Forms.Panel panel_Right;
         private System.Windows.Forms.Panel panel_Bottom;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button1;
@@ -293,6 +279,8 @@ namespace AuraRevival
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

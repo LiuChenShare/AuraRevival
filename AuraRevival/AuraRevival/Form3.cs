@@ -1,12 +1,15 @@
-﻿using System;
+﻿using AuraRevival.Business;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace AuraRevival
 {
@@ -22,23 +25,6 @@ namespace AuraRevival
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        { 
-        }
-        private void button3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-
-        }
-
         /// <summary>
         /// 页面加载结束
         /// </summary>
@@ -46,7 +32,17 @@ namespace AuraRevival
         /// <param name="e"></param>
         private void Form2_Shown(object sender, EventArgs e)
         {
+            listView1.LabelWrap = true;
+            listView1.Columns.Add(new ColumnHeader()
+            {
+                Name = "ColumnHeader1",
+                Text = "消息",
+                Width= listView1.Width,
+            });;
+            //listView1.Scrollable
             //FormRefresh();
+            MainGame.Instance.GameStart();
+            MainGame.Instance.SecondsEvent += ShowMsg;
         }
 
         /// <summary>
@@ -57,11 +53,11 @@ namespace AuraRevival
         private void panel1_MouseDown(object sender, MouseEventArgs e)
         {
             int padding = Util.Padding;
-            Coor coor = new Coor(e.X/ padding, e.Y / padding);
+            Coor coor = new Coor(e.X / padding, e.Y / padding);
 
             #region 上次点击的位置标绿
             Graphics g2 = panel1.CreateGraphics();
-            Pen pen2 = new Pen(Color.Green); 
+            Pen pen2 = new Pen(Color.Green);
 
             //废弃上面的方法，直接画矩形
             g2.DrawRectangle(pen2, CoorOld.Rectangle);
@@ -80,7 +76,7 @@ namespace AuraRevival
             //g.DrawLine(pen, new Point(coor.Rectangle.Location.X + 1, coor.Rectangle.Location.Y), new Point(coor.Rectangle.Location.X + 1, coor.Rectangle.Location.Y + 1));
 
             //废弃上面的方法，直接画矩形
-            g.DrawRectangle(pen, coor.Rectangle); 
+            g.DrawRectangle(pen, coor.Rectangle);
             g.Dispose();
             #endregion
 
@@ -173,7 +169,7 @@ namespace AuraRevival
 
             //当前选中的地方画矩形
             g.DrawRectangle(penRed, CoorOld.Rectangle);
-            
+
             g.Dispose();
         }
 
@@ -220,6 +216,22 @@ namespace AuraRevival
                 //contextMenuStrip1.Show(this,5,5);
                 contextMenuStrip1.Show((Control)sender, e.Location);
             }
+        }
+
+        private void ShowMsg(DateTime time)
+        {
+            listView1.Invoke(new Action(() =>
+            {
+                if (listView1.Items.Count > 100)
+                {
+                    listView1.Items.RemoveAt(0);
+                }
+                listView1.Items.Add($"{DateTime.Now.ToString("HH:mm:ss")} - [ShowMsg]：嘀嘀嘀，已经 {time.ToString("yyyy-MM-dd HH:mm:ss")} 了");
+
+                listView1.Focus(); //聚焦光标
+                //listView1.Items[listView1.Items.Count - 1].Selected = true; //选中最后一行
+                listView1.Items[listView1.Items.Count - 1].EnsureVisible(); ;//显示内容自动滚动到最后一行
+            }));
         }
     }
 }

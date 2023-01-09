@@ -4,6 +4,28 @@ namespace AuraRevival.Business
 {
     public class MainGame
     {
+        #region 单例
+        private static volatile MainGame instance;
+        private static object syncRoot = new Object();
+        private MainGame() { }
+        public static MainGame Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    lock (syncRoot)
+                    {
+                        if (instance == null)
+                            instance = new MainGame();
+                    }
+                }
+                return instance;
+            }
+        }
+        #endregion 
+
+
         public delegate void TimeHandler(DateTime time);//声明委托
         /// <summary>秒事件 </summary>
         public event TimeHandler SecondsEvent;
@@ -18,11 +40,11 @@ namespace AuraRevival.Business
 
 
         //实例化Timer类，设置间隔时间为1秒；
-        System.Timers.Timer GameTimer = new System.Timers.Timer(1000);
+        private System.Timers.Timer GameTimer = new System.Timers.Timer(1000);
         /// <summary>
         /// 游戏时间
         /// </summary>
-        DateTime GameDate = new DateTime();
+        public DateTime GameDate { get; private set; } = new DateTime();
 
         public void GameStart()
         {
@@ -34,7 +56,7 @@ namespace AuraRevival.Business
             GameTimer.Start(); //启动定时器
         }
 
-        public void Execute(object source, System.Timers.ElapsedEventArgs e)
+        private void Execute(object source, System.Timers.ElapsedEventArgs e)
         {
             GameDate = GameDate.AddSeconds(1);
             SecondsEvent?.Invoke(GameDate);
@@ -47,6 +69,10 @@ namespace AuraRevival.Business
                     if (GameDate.Hour == 0)
                     {
                         DaysEvent?.Invoke(GameDate);
+                        if (GameDate.Day == 1)
+                        {
+                            MonthsEvent?.Invoke(GameDate);
+                        }
                     }
                 }
             }

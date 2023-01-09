@@ -12,7 +12,7 @@ namespace AuraRevivalTest
         [DataRow(1)]
         public void TestMethod1(int index)
         {
-            AuraRevival.Business.MainGame game = new AuraRevival.Business.MainGame();
+            AuraRevival.Business.MainGame game = AuraRevival.Business.MainGame.Instance;
             game.SecondsEvent += ShowMsg;
             game.GameStart();
             Thread.Sleep(200 * 1000);
