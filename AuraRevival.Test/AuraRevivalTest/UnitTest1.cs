@@ -16,6 +16,10 @@ namespace AuraRevivalTest
         }
 
 
+        /// <summary>
+        /// 基地(建筑)升级测试
+        /// </summary>
+        /// <param name="index"></param>
         [TestMethod]
         [DataTestMethod]
         [DataRow(1)]
