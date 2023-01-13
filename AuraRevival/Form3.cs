@@ -1,4 +1,5 @@
 ﻿using AuraRevival.Business;
+using AuraRevival.Business.Construct;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,6 +20,10 @@ namespace AuraRevival
         /// 上次点击的坐标
         /// </summary>
         public Coor CoorOld { get; set; } = new Coor(0, 0);
+        /// <summary>
+        /// 界面左上角的格子
+        /// </summary>
+        public Coor ZeroCoor { get; set; } = new Coor(0, 0);
 
         public Form3()
         {
@@ -136,13 +141,13 @@ namespace AuraRevival
         }
 
         /// <summary>
-        /// 归零
+        /// 回到基地
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void button8_Click(object sender, EventArgs e)
         {
-            panel_Map.Location = new Point(0, 0);
+            GoHome();
             ButtonRefresh();
         }
 
@@ -177,6 +182,33 @@ namespace AuraRevival
 
             //当前选中的地方画矩形
             g.DrawRectangle(penRed, CoorOld.Rectangle);
+
+
+
+            #region 绘制建筑
+            //计算界面能展示多少格子
+            int viewXMax = panel_MapView.Width / Util.Padding;
+            int viewYMax = panel_MapView.Height / Util.Padding;
+            //获取界面展示范围
+            Rectangle rectangle = new Rectangle(ZeroCoor.CoorPoint, new Size(viewXMax, viewYMax));
+            List<IConstruct> constructs = Grain.Instance.Constructs.Where(x => rectangle.Contains(x.Location)).ToList();
+            foreach(IConstruct construct in constructs)
+            {
+                //获得基地在界面的坐标
+                Coor constructCoor = new(construct.Location);
+                string imagePaht = construct.Type switch
+                {
+                    ConstructType.Default => Util.房子_灰,
+                    ConstructType.Base => Util.房子_蓝,
+                    _ => Util.房子_灰,
+                };
+                g.DrawImage(Image.FromFile(imagePaht),
+                    constructCoor.Rectangle.X,
+                    constructCoor.Rectangle.Y,
+                    constructCoor.Rectangle.Width,
+                    constructCoor.Rectangle.Height);
+            }
+            #endregion
 
             g.Dispose();
 
@@ -259,13 +291,13 @@ namespace AuraRevival
             int x = construct.Location.X - viewXMax / 2;
             int y = construct.Location.Y - viewYMax / 2;
             //获得应该放在界面左上角的格子信息
-            Coor zeroCoor = new(x, y);
+            ZeroCoor = new(x, y);
             //移动地图，使基地在中间
-            panel_Map.Location = new Point(-zeroCoor.Rectangle.X, -zeroCoor.Rectangle.Y);
-            //基地绘图
-            Graphics g = panel_Map.CreateGraphics();
-            g.DrawImage(Image.FromFile(Util.房子_蓝), constructCoor.Rectangle.X, constructCoor.Rectangle.Y, constructCoor.Rectangle.Width, constructCoor.Rectangle.Height);
-            g.Dispose();
+            panel_Map.Location = new Point(-ZeroCoor.Rectangle.X, -ZeroCoor.Rectangle.Y);
+            ////基地绘图
+            //Graphics g = panel_Map.CreateGraphics();
+            //g.DrawImage(Image.FromFile(Util.房子_蓝), constructCoor.Rectangle.X, constructCoor.Rectangle.Y, constructCoor.Rectangle.Width, constructCoor.Rectangle.Height);
+            //g.Dispose();
         }
     }
 }
