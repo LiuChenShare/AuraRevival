@@ -1,3 +1,5 @@
+using AuraRevival.Business;
+
 namespace AuraRevivalTest
 {
     [TestClass]
@@ -22,16 +24,21 @@ namespace AuraRevivalTest
         /// <param name="index"></param>
         [TestMethod]
         [DataTestMethod]
-        [DataRow(1)]
-        public void Construct_UpLevel(int index)
+        [DataRow("基地")]
+        public void Construct_UpLevel(string constructBaseName)
         {
             AuraRevival.Business.MainGame game = AuraRevival.Business.MainGame.Instance;
-            AuraRevival.Business.Construct.Construct_Base construct = new AuraRevival.Business.Construct.Construct_Base("基地");
-            game.SecondsEvent += (DateTime time) => { ShowMsg($"ShowMsg：倒计时 {construct._tally} "); };
-
-            construct.ScriptEvent(1, null);
-
+            if (game.GameState == 0)
+            {
+                game.Init(constructBaseName);
+            }
             game.GameStart();
+            AuraRevival.Business.Construct.Construct_Base? construct = Grain.Instance.Constructs.FirstOrDefault(x => x.Type == AuraRevival.Business.Construct.ConstructType.Base) as AuraRevival.Business.Construct.Construct_Base;
+            
+            game.SecondsEvent += (DateTime time) => { ShowMsg($"ShowMsg：倒计时 {construct?._tallyMap} "); };
+
+            construct?.ScriptEvent(1, null);
+
 
             //AuraRevival.Business.Construct. _Base = new;
 

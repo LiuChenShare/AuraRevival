@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace AuraRevival.Business.Construct
 {
@@ -15,6 +16,10 @@ namespace AuraRevival.Business.Construct
 
         ConstructType Type { get; set; }
 
+        /// <summary>
+        /// 区块id
+        /// </summary>
+        Point Location { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         //int Level { get => Level; set => Level = Level; }
 
         //int Xxxxxxxx { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -31,7 +36,7 @@ namespace AuraRevival.Business.Construct
         /// 执行脚本事件
         /// </summary>
         /// <param name="time"></param>
-        //bool ScriptEvent(int scriptCode, object obj) => throw new NotImplementedException();
+        bool ScriptEvent(int scriptCode, object obj) => throw new NotImplementedException();
 
         //public void Xxx() => throw new NotImplementedException();
     }

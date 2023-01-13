@@ -40,6 +40,8 @@ namespace AuraRevival.Business
         /// <summary>
         /// 建筑
         /// </summary>
-        public List<IConstruct> Construct { get; set; } = new List<IConstruct>();
+        public List<IConstruct> Constructs { get ; set; } = new List<IConstruct>();
+
+
     }
 }

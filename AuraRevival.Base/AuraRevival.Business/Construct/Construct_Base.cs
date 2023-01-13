@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,33 +17,35 @@ namespace AuraRevival.Business.Construct
         public string Description { get; set; }
         public ConstructType Type { get; set; } = ConstructType.Base;
         public int Level { get; set; } = 1;
+        public Point Location { get; set; }
 
         /// <summary> 行动值 </summary>
-        public int _tally;
+        public int _tallyMap;
         /// <summary> 行动值模板 </summary>
-        private int _tallyTep;
+        private int _tallyMapTep;
         /// <summary> 当前指令 </summary>
         private int _scriptCode = -1;
 
         private Construct_Base() { }
         private readonly Dictionary<int, Construct_Base> _levelConfig;
 
-        public Construct_Base(string name)
+        public Construct_Base(string name, Point  location)
         {
             Id = Guid.NewGuid();
             Type = ConstructType.Base;
             Name = name;
             Level = 1;
+            Location = location;
 
             //注册秒事件
             Grain.Instance.MainGame.SecondsEvent += ConstructSecondsEventExecute;
 
             _levelConfig = new Dictionary<int, Construct_Base>
             {
-                { 1, new Construct_Base() { Description = "这个是你最后的希望", _tallyTep = 60 } },
-                { 2, new Construct_Base() { Description = "稍微有了点起色", _tallyTep = 55 } },
-                { 3, new Construct_Base() { Description = "还不错呦", _tallyTep = 54 } },
-                { 4, new Construct_Base() { Description = "拥有了一战之力", _tallyTep = 53 } }
+                { 1, new Construct_Base() { Description = "这个是你最后的希望", _tallyMapTep = 60 } },
+                { 2, new Construct_Base() { Description = "稍微有了点起色", _tallyMapTep = 55 } },
+                { 3, new Construct_Base() { Description = "还不错呦", _tallyMapTep = 54 } },
+                { 4, new Construct_Base() { Description = "拥有了一战之力", _tallyMapTep = 53 } }
             };
             LevelRefresh(Level);
         }
@@ -58,10 +61,10 @@ namespace AuraRevival.Business.Construct
                     {
                         case 1:
                             {
-                                _tally--;
-                                if (_tally <= 0)
+                                _tallyMap--;
+                                if (_tallyMap <= 0)
                                 {
-                                    _tally = _tallyTep;
+                                    _tallyMap = _tallyMapTep;
                                     Level = Level++;
                                     LevelRefresh(Level);
                                     _scriptCode = -1;
@@ -106,8 +109,8 @@ namespace AuraRevival.Business.Construct
             {
                 var levelConfig = _levelConfig[level];
                 Description = levelConfig.Description;
-                _tallyTep = levelConfig._tallyTep;
-                _tally = _tallyTep;
+                _tallyMapTep = levelConfig._tallyMapTep;
+                _tallyMap = _tallyMapTep;
             }
         }
 
@@ -123,10 +126,10 @@ namespace AuraRevival.Business.Construct
                 if (Level + 1 > levelMax)
                     return;
 
-                while (_tally > 0)
+                while (_tallyMap > 0)
                 {
                     Thread.Sleep(1000);
-                    _tally--;
+                    _tallyMap--;
                 }
                 Level = Level++;
                 LevelRefresh(Level);

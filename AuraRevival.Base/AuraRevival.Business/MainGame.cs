@@ -45,11 +45,30 @@ namespace AuraRevival.Business
         public event TimeHandler MonthsEvent;
         #endregion
 
-        /// <summary> 实体 </summary>
-        public List<IEntity> Entitys = new List<IEntity>();
+        /// <summary>
+        /// 游戏状态
+        /// -1-GameOver
+        /// 0-初始化
+        /// 1-进行中
+        /// </summary>
+        public int GameState { get; set; } = 0;
+
+        public Tuple<int, int> MapSize { get; set; } = new Tuple<int, int>(1000, 1000);
+
+        /// <summary>
+        /// 建筑
+        /// 1.Id
+        /// 2.Name
+        /// 3.Type
+        /// </summary>
+        public List<Tuple<Guid, string, ConstructType>> Entitys = new List<Tuple<Guid, string, ConstructType>>();
+        /// <summary>
+        /// 建筑
+        /// </summary>
+        public List<IConstruct> Constructs = new List<IConstruct>();
 
         //实例化Timer类，设置间隔时间为1秒；
-        private System.Timers.Timer GameTimer = new System.Timers.Timer(1000);
+        private readonly System.Timers.Timer GameTimer = new System.Timers.Timer(1000);
         /// <summary>
         /// 游戏时间
         /// </summary>
@@ -63,10 +82,25 @@ namespace AuraRevival.Business
             GameTimer.AutoReset = true;//设置是执行一次（false）还是一直执行(true)；
             GameTimer.Enabled = true;//是否执行System.Timers.Timer.Elapsed事件；
 
-            Construct_Base _Base = new Construct_Base("123");
-
-
             GameTimer.Start(); //启动定时器
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="constructBaseName">基地名称</param>
+        public void Init(string constructBaseName)
+        {
+            if (GameState == 0)
+            {
+                Random ran = new Random();
+                int x = ran.Next(MapSize.Item1 - 1);
+                int y = ran.Next(MapSize.Item2 - 1);
+
+                Construct_Base construct_Base = new Construct_Base(constructBaseName, new System.Drawing.Point(x, y));
+                Constructs.Add(construct_Base);
+                Grain.Instance.Constructs.Add(construct_Base);
+            }
         }
 
         private void Execute(object source, System.Timers.ElapsedEventArgs e)
