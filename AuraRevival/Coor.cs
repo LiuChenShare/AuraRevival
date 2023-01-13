@@ -25,7 +25,13 @@ namespace AuraRevival
         {
             int padding = Util.Padding; 
             CoorPoint = new Point(x, y);
-            Rectangle = new Rectangle(x * padding, y * padding, padding, padding);
+            Rectangle = new Rectangle(CoorPoint.X * padding, CoorPoint.Y * padding, padding, padding);
+        }
+        public Coor(Point point)
+        {
+            int padding = Util.Padding;
+            CoorPoint = point;
+            Rectangle = new Rectangle(CoorPoint.X * padding, CoorPoint.Y * padding, padding, padding);
         }
     }
 }

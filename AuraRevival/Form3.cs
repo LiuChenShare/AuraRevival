@@ -32,20 +32,22 @@ namespace AuraRevival
         /// <param name="e"></param>
         private void Form2_Shown(object sender, EventArgs e)
         {
-            panel_Map.Location= new Point(-1100,-1100);
+            panel_Map.Size = new Size(Grain.Instance.MainGame.MapSize.Item1 * 25 + 1, Grain.Instance.MainGame.MapSize.Item2 * 25 + 1);
+            GoHome();
 
             listView1.LabelWrap = true;
             listView1.Columns.Add(new ColumnHeader()
             {
                 Name = "ColumnHeader1",
                 Text = "消息",
-                Width= listView1.Width,
-            });;
+                Width = listView1.Width,
+            });
             //listView1.Scrollable
             //FormRefresh();
             MainGame.Instance.GameStart();
             MainGame.Instance.SecondsEvent += ShowMsg;
         }
+
 
         /// <summary>
         /// 当鼠标指针位于控件上并按下鼠标键时发生。
@@ -96,6 +98,7 @@ namespace AuraRevival
             panel_Map.Location = new Point(panel_Map.Location.X + padding, panel_Map.Location.Y);
             ButtonRefresh();
         }
+
         /// <summary>
         /// 向右
         /// </summary>
@@ -107,6 +110,7 @@ namespace AuraRevival
             panel_Map.Location = new Point(panel_Map.Location.X - padding, panel_Map.Location.Y);
             ButtonRefresh();
         }
+
         /// <summary>
         /// 向上
         /// </summary>
@@ -118,6 +122,7 @@ namespace AuraRevival
             panel_Map.Location = new Point(panel_Map.Location.X, panel_Map.Location.Y + padding);
             ButtonRefresh();
         }
+
         /// <summary>
         /// 向下
         /// </summary>
@@ -129,6 +134,7 @@ namespace AuraRevival
             panel_Map.Location = new Point(panel_Map.Location.X, panel_Map.Location.Y - padding);
             ButtonRefresh();
         }
+
         /// <summary>
         /// 归零
         /// </summary>
@@ -173,6 +179,8 @@ namespace AuraRevival
             g.DrawRectangle(penRed, CoorOld.Rectangle);
 
             g.Dispose();
+
+            ButtonRefresh();
         }
 
         /// <summary>
@@ -234,6 +242,30 @@ namespace AuraRevival
                 //listView1.Items[listView1.Items.Count - 1].Selected = true; //选中最后一行
                 listView1.Items[listView1.Items.Count - 1].EnsureVisible(); ;//显示内容自动滚动到最后一行
             }));
+        }
+
+        /// <summary>
+        /// 地图跳转至基地位置
+        /// </summary>
+        private void GoHome()
+        {
+            AuraRevival.Business.Construct.Construct_Base construct = Grain.Instance.GetConstructBase();
+            //获得基地在界面的坐标
+            Coor constructCoor = new(construct.Location);
+            //计算界面能展示多少格子
+            int viewXMax = panel_MapView.Width / Util.Padding;
+            int viewYMax = panel_MapView.Height / Util.Padding;
+            //获得地图的偏移坐标
+            int x = construct.Location.X - viewXMax / 2;
+            int y = construct.Location.Y - viewYMax / 2;
+            //获得应该放在界面左上角的格子信息
+            Coor zeroCoor = new(x, y);
+            //移动地图，使基地在中间
+            panel_Map.Location = new Point(-zeroCoor.Rectangle.X, -zeroCoor.Rectangle.Y);
+            //基地绘图
+            Graphics g = panel_Map.CreateGraphics();
+            g.DrawImage(Image.FromFile(Util.房子_蓝), constructCoor.Rectangle.X, constructCoor.Rectangle.Y, constructCoor.Rectangle.Width, constructCoor.Rectangle.Height);
+            g.Dispose();
         }
     }
 }

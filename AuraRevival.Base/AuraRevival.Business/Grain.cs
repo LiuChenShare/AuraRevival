@@ -43,5 +43,14 @@ namespace AuraRevival.Business
         public List<IConstruct> Constructs { get ; set; } = new List<IConstruct>();
 
 
+
+        /// <summary>
+        /// 获取基地
+        /// </summary>
+        /// <returns></returns>
+        public Construct_Base GetConstructBase()
+        {
+            return Grain.Instance.Constructs.FirstOrDefault(x => x.Type == AuraRevival.Business.Construct.ConstructType.Base) as AuraRevival.Business.Construct.Construct_Base;
+        }
     }
 }
