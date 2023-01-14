@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Linq;
 using System.Reflection.Emit;
@@ -185,28 +186,60 @@ namespace AuraRevival
 
 
 
-            #region 绘制建筑
+            #region 绘制建筑(废弃)
+            ////计算界面能展示多少格子
+            //int viewXMax = panel_MapView.Width / Util.Padding;
+            //int viewYMax = panel_MapView.Height / Util.Padding;
+            ////获取界面展示范围
+            //Rectangle rectangle = new Rectangle(ZeroCoor.CoorPoint, new Size(viewXMax, viewYMax));
+            //List<IConstruct> constructs = Grain.Instance.Constructs.Where(x => rectangle.Contains(x.Location)).ToList();
+            //foreach (IConstruct construct in constructs)
+            //{
+            //    //获得基地在界面的坐标
+            //    Coor constructCoor = new(construct.Location);
+            //    string imagePaht = construct.Type switch
+            //    {
+            //        ConstructType.Default => Util.房子_灰,
+            //        ConstructType.Base => Util.房子_蓝,
+            //        _ => Util.房子_灰,
+            //    };
+            //    g.DrawImage(Image.FromFile(imagePaht),
+            //        constructCoor.Rectangle.X,
+            //        constructCoor.Rectangle.Y,
+            //        constructCoor.Rectangle.Width,
+            //        constructCoor.Rectangle.Height);
+            //}
+            #endregion
+
+            #region 绘制展示的区块
             //计算界面能展示多少格子
             int viewXMax = panel_MapView.Width / Util.Padding;
             int viewYMax = panel_MapView.Height / Util.Padding;
             //获取界面展示范围
             Rectangle rectangle = new Rectangle(ZeroCoor.CoorPoint, new Size(viewXMax, viewYMax));
-            List<IConstruct> constructs = Grain.Instance.Constructs.Where(x => rectangle.Contains(x.Location)).ToList();
-            foreach (IConstruct construct in constructs)
+            List<Block> blocks = Grain.Instance.Blocks.Where(x => rectangle.Contains(x.Id)).ToList();
+            foreach (Block block in blocks)
             {
-                //获得基地在界面的坐标
-                Coor constructCoor = new(construct.Location);
-                string imagePaht = construct.Type switch
+                #region 绘制建筑
+                if (block.Constructs.Any())
                 {
-                    ConstructType.Default => Util.房子_灰,
-                    ConstructType.Base => Util.房子_蓝,
-                    _ => Util.房子_灰,
-                };
-                g.DrawImage(Image.FromFile(imagePaht),
-                    constructCoor.Rectangle.X,
-                    constructCoor.Rectangle.Y,
-                    constructCoor.Rectangle.Width,
-                    constructCoor.Rectangle.Height);
+                    IConstruct construct = block.Constructs.OrderBy(x => x.Type).FirstOrDefault();
+
+                    //获得建筑在界面的坐标
+                    Coor constructCoor = new(construct.Location);
+                    string imagePaht = construct.Type switch
+                    {
+                        ConstructType.Default => Util.房子_灰,
+                        ConstructType.Base => Util.房子_蓝,
+                        _ => Util.房子_灰,
+                    };
+                    g.DrawImage(Image.FromFile(imagePaht),
+                        constructCoor.Rectangle.X,
+                        constructCoor.Rectangle.Y,
+                        constructCoor.Rectangle.Width,
+                        constructCoor.Rectangle.Height);
+                }
+                #endregion
             }
             #endregion
 
