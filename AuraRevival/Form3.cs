@@ -1,17 +1,6 @@
 ﻿using AuraRevival.Business;
 using AuraRevival.Business.Construct;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Diagnostics.Contracts;
-using System.Drawing;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace AuraRevival
 {
@@ -52,6 +41,7 @@ namespace AuraRevival
             //FormRefresh();
             MainGame.Instance.GameStart();
             MainGame.Instance.SecondsEvent += ShowMsg;
+            MainGame.Instance.SecondsEvent += ShowDate;
         }
 
 
@@ -220,13 +210,16 @@ namespace AuraRevival
             List<Block> blocks = Grain.Instance.Blocks.Where(x => rectangle.Contains(x.Id)).ToList();
             foreach (Block block in blocks)
             {
+                //获得区块在界面的坐标
+                Coor constructCoor = new(block.Id);
+                g.FillRectangle(new SolidBrush(Color.White), new Rectangle(constructCoor.Rectangle.X + 1, constructCoor.Rectangle.Y + 1, constructCoor.Rectangle.Width - 1, constructCoor.Rectangle.Height - 1));
+
+
                 #region 绘制建筑
                 if (block.Constructs.Any())
                 {
                     IConstruct construct = block.Constructs.OrderBy(x => x.Type).FirstOrDefault();
 
-                    //获得建筑在界面的坐标
-                    Coor constructCoor = new(construct.Location);
                     string imagePaht = construct.Type switch
                     {
                         ConstructType.Default => Util.房子_灰,
@@ -307,6 +300,13 @@ namespace AuraRevival
                 listView1.Focus(); //聚焦光标
                 //listView1.Items[listView1.Items.Count - 1].Selected = true; //选中最后一行
                 listView1.Items[listView1.Items.Count - 1].EnsureVisible(); ;//显示内容自动滚动到最后一行
+            }));
+        }
+        private void ShowDate(DateTime time)
+        {
+            label1.Invoke(new Action(() =>
+            {
+                label1.Text = time.ToString("yyyy-MM-dd HH:mm:ss");
             }));
         }
 
