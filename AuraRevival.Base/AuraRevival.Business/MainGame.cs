@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using AuraRevival.Business.Construct;
 using AuraRevival.Business.Entity;
 
@@ -96,11 +98,27 @@ namespace AuraRevival.Business
                 Random ran = new Random();
                 int x = ran.Next(MapSize.Item1 - 1);
                 int y = ran.Next(MapSize.Item2 - 1);
+                Point point = new Point(x, y);
 
-                Construct_Base construct_Base = new Construct_Base(constructBaseName, new System.Drawing.Point(x, y));
+                Construct_Base construct_Base = new Construct_Base(constructBaseName, point);
+
+                Block block;
+                if (Grain.Instance.Blocks.Any(x => x.Id == point))
+                    block = Grain.Instance.Blocks.Where(x => x.Id == point).FirstOrDefault();
+                else
+                    block = NewBlock(point);
+
                 Constructs.Add(construct_Base);
                 Grain.Instance.Constructs.Add(construct_Base);
+                block.Constructs.Add(construct_Base);
             }
+        }
+
+        public Block NewBlock(Point point)
+        {
+            var block = new Block(point);
+            Grain.Instance.Blocks.Add(block);
+            return block;
         }
 
         private void Execute(object source, System.Timers.ElapsedEventArgs e)

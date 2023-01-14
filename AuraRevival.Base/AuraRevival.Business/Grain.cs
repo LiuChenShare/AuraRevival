@@ -38,9 +38,15 @@ namespace AuraRevival.Business
         public MainGame MainGame { get; set; } = MainGame.Instance;
 
         /// <summary>
+        /// 区块
+        /// </summary>
+        public List<Block> Blocks { get; set; } = new List<Block>();
+
+        /// <summary>
         /// 建筑
         /// </summary>
         public List<IConstruct> Constructs { get ; set; } = new List<IConstruct>();
+
 
 
 

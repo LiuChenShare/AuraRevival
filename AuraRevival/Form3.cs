@@ -192,7 +192,7 @@ namespace AuraRevival
             //获取界面展示范围
             Rectangle rectangle = new Rectangle(ZeroCoor.CoorPoint, new Size(viewXMax, viewYMax));
             List<IConstruct> constructs = Grain.Instance.Constructs.Where(x => rectangle.Contains(x.Location)).ToList();
-            foreach(IConstruct construct in constructs)
+            foreach (IConstruct construct in constructs)
             {
                 //获得基地在界面的坐标
                 Coor constructCoor = new(construct.Location);
@@ -209,6 +209,7 @@ namespace AuraRevival
                     constructCoor.Rectangle.Height);
             }
             #endregion
+
 
             g.Dispose();
 
