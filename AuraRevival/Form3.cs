@@ -1,6 +1,8 @@
 ﻿using AuraRevival.Business;
 using AuraRevival.Business.Construct;
 using System.Data;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace AuraRevival
 {
@@ -40,7 +42,7 @@ namespace AuraRevival
             //listView1.Scrollable
             //FormRefresh();
             MainGame.Instance.GameStart();
-            MainGame.Instance.SecondsEvent += ShowMsg;
+            MainGame.Instance.MsgEvent += ShowMsg;
             MainGame.Instance.SecondsEvent += ShowDate;
         }
 
@@ -276,18 +278,76 @@ namespace AuraRevival
             FormRefresh();
         }
 
+        /// <summary>
+        /// 在鼠标指针在地图上上并释放鼠标键时发生
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void panel_Map_MouseUp(object sender, MouseEventArgs e)
         {
             base.OnMouseUp(e);
             if (e.Button == MouseButtons.Right)
             {
+                //初始化右键菜单
+                contextMenuStrip1.Items.Clear();
+                ToolStripMenuItem menuItem_Title = new()
+                {
+                    Enabled = false,
+                };
+                List<ToolStripItem> stripItemsConstruct = new List<ToolStripItem>();//建筑右键菜单
+
+
+                //判断当前是哪个区块
+                int padding = Util.Padding;
+                Coor coor = new Coor(e.X / padding, e.Y / padding);
+                menuItem_Title.Text = $"区块（{coor.CoorPoint.X},{coor.CoorPoint.Y}）";
+
+                if (!Grain.Instance.Blocks.Any(x => x.Id == coor.CoorPoint))
+                    menuItem_Title.Text = $"{menuItem_Title.Text}（未探索）";
+                else
+                {
+                    menuItem_Title.ForeColor = Color.Black;
+                    Block block = Grain.Instance.Blocks.FirstOrDefault(x => x.Id == coor.CoorPoint);
+                    //加入实体右键菜单
+
+                    //加入建筑右键菜单
+                    if (block.Constructs.Any())
+                    {
+                        foreach(var construct in block.Constructs)
+                        {
+                            ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem();
+                            toolStripMenuItem.Text = construct.Name;
+                            if (construct.Type == ConstructType.Base)
+                            {
+                                ToolStripMenuItem stripMenu_UpLevel = new ToolStripMenuItem();
+                                stripMenu_UpLevel.Text = "升级";
+                                stripMenu_UpLevel.Click += toolStripMenuItem_Click;
+                                stripMenu_UpLevel.Tag = new Tuple<int, object, IConstruct>(1, null, construct);
+                                toolStripMenuItem.DropDownItems.Add(stripMenu_UpLevel);
+                            }
+                            stripItemsConstruct.Add(toolStripMenuItem);
+                        }
+                        stripItemsConstruct.Add(new ToolStripSeparator());
+                    }
+                }
+
+                contextMenuStrip1.Items.AddRange(new ToolStripItem[] { menuItem_Title, new ToolStripSeparator() });
+                contextMenuStrip1.Items.AddRange(stripItemsConstruct.ToArray());
+
                 //contextMenuStrip1.Show(this, e.Location);
                 //contextMenuStrip1.Show(this,5,5);
                 contextMenuStrip1.Show((Control)sender, e.Location);
             }
         }
 
-        private void ShowMsg(DateTime time)
+
+        /// <summary>
+        /// 展示消息
+        /// </summary>
+        /// <param name="type">来源类型:0-游戏公告，1-区块，2-建筑，3-实体</param>
+        /// <param name="source">来源名称</param>
+        /// <param name="content">消息内容</param>
+        private void ShowMsg(int type, string source, string content)
         {
             listView1.Invoke(new Action(() =>
             {
@@ -295,13 +355,38 @@ namespace AuraRevival
                 {
                     listView1.Items.RemoveAt(0);
                 }
-                listView1.Items.Add($"{DateTime.Now.ToString("HH:mm:ss")} - [ShowMsg]：嘀嘀嘀，已经 {time.ToString("yyyy-MM-dd HH:mm:ss")} 了");
+                ListViewItem item = new ListViewItem();
+                item.Text = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} - [{source}]：{content}";
+                switch (type)
+                {
+                    case 0:
+                        item.ForeColor = Color.Red;
+                        break;
+                    case 1: 
+                        item.ForeColor= Color.Yellow;
+                        break;
+                    case 2:
+                        item.ForeColor = Color.Blue; 
+                        break;
+                    case 3:
+                        item.ForeColor = Color.Black;
+                        break;
+                    default:
+                        item.ForeColor = Color.Gray;
+                        break;
+                }
+                listView1.Items.Add(item);
 
                 listView1.Focus(); //聚焦光标
                 //listView1.Items[listView1.Items.Count - 1].Selected = true; //选中最后一行
                 listView1.Items[listView1.Items.Count - 1].EnsureVisible(); ;//显示内容自动滚动到最后一行
             }));
         }
+
+        /// <summary>
+        /// 展示时间
+        /// </summary>
+        /// <param name="time"></param>
         private void ShowDate(DateTime time)
         {
             label1.Invoke(new Action(() =>
@@ -332,6 +417,21 @@ namespace AuraRevival
             //Graphics g = panel_Map.CreateGraphics();
             //g.DrawImage(Image.FromFile(Util.房子_蓝), constructCoor.Rectangle.X, constructCoor.Rectangle.Y, constructCoor.Rectangle.Width, constructCoor.Rectangle.Height);
             //g.Dispose();
+        }
+
+        /// <summary>
+        /// 右键菜单点击事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void toolStripMenuItem_Click(object? sender, EventArgs e)
+        {
+            ToolStripItem? stripItem = sender as ToolStripItem;
+            if (stripItem?.Tag == null) return;
+            Tuple<int, object, IConstruct> tag = stripItem.Tag as Tuple<int, object, IConstruct>;
+
+            tag.Item3.ScriptEvent(tag.Item1, tag.Item2);
+
         }
     }
 }

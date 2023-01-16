@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using AuraRevival.Business.Construct;
 using AuraRevival.Business.Entity;
 
@@ -45,6 +46,15 @@ namespace AuraRevival.Business
         public event TimeHandler DaysEvent;
         /// <summary>月事件 </summary>
         public event TimeHandler MonthsEvent;
+
+        /// <summary>
+        /// 消息委托
+        /// </summary>
+        /// <param name="type">来源类型:0-游戏公告，1-区块，2-建筑，3-实体</param>
+        /// <param name="source">来源名称</param>
+        /// <param name="content">消息内容</param>
+        public delegate void MsgHandler(int type, string source, string content);
+        public event MsgHandler MsgEvent;
         #endregion
 
         /// <summary>
@@ -119,6 +129,19 @@ namespace AuraRevival.Business
             var block = new Block(point);
             Grain.Instance.Blocks.Add(block);
             return block;
+        }
+
+        /// <summary>
+        /// 消息
+        /// </summary>
+        /// <param name="type">来源类型:0-游戏公告，1-区块，2-建筑，3-实体</param>
+        /// <param name="source">来源名称</param>
+        /// <param name="content">消息内容</param>
+        /// <returns></returns>
+        public Task Msg(int type, string source, string content)
+        {
+            MsgEvent?.Invoke(type, source, content);
+            return Task.CompletedTask;
         }
 
         private void Execute(object source, System.Timers.ElapsedEventArgs e)

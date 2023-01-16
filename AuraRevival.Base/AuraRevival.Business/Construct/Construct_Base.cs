@@ -65,9 +65,10 @@ namespace AuraRevival.Business.Construct
                                 if (_tallyMap <= 0)
                                 {
                                     _tallyMap = _tallyMapTep;
-                                    Level = Level++;
+                                    Level = Level+1;
                                     LevelRefresh(Level);
                                     _scriptCode = -1;
+                                    Grain.Instance.MainGame.Msg(2,Name,$"升级为{Level}级");
                                 }
                                 break;
                             }
@@ -110,8 +111,8 @@ namespace AuraRevival.Business.Construct
                 var levelConfig = _levelConfig[level];
                 Description = levelConfig.Description;
                 _tallyMapTep = levelConfig._tallyMapTep;
-                _tallyMap = _tallyMapTep;
             }
+            _tallyMap = _tallyMapTep;
         }
 
 
