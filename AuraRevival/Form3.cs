@@ -1,7 +1,9 @@
 ﻿using AuraRevival.Business;
 using AuraRevival.Business.Construct;
 using System.Data;
+using System.Reflection.Emit;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace AuraRevival
@@ -83,6 +85,7 @@ namespace AuraRevival
             #endregion
 
             CoorOld = coor;
+            ShowInfo(coor.CoorPoint);
         }
 
         /// <summary>
@@ -381,6 +384,62 @@ namespace AuraRevival
                 //listView1.Items[listView1.Items.Count - 1].Selected = true; //选中最后一行
                 listView1.Items[listView1.Items.Count - 1].EnsureVisible(); ;//显示内容自动滚动到最后一行
             }));
+        }
+
+        private void ShowInfo(Point point) {
+            
+            Thread thread = new Thread(() => {
+
+                List<ListViewItem> lvs = new List<ListViewItem>();
+                List<ListViewGroup> groups = new List<ListViewGroup>();
+                ListViewGroup group1 = new ListViewGroup
+                {
+                    Header = "区块",
+                    //Footer = "区块啊"
+                };
+                ListViewGroup group2 = new ListViewGroup
+                {
+                    Header = "建筑",
+                    //Footer = "建筑啊"
+                };
+
+                var block = Grain.Instance.Blocks.FirstOrDefault(x => x.Id == point);
+                if (block == null)
+                {
+                    ListViewItem lvBlock = new ListViewItem("区块");
+                    lvBlock.Group = group1;
+                    lvBlock.SubItems.Add("未探索");
+                    lvs.Add(lvBlock);
+                }
+                else
+                {
+                    ListViewItem lvBlock = new ListViewItem("区块");
+                    lvBlock.Group = group1;
+                    lvBlock.SubItems.Add($"（{block.Id.X},{block.Id.Y}）");
+                    lvs.Add(lvBlock);
+                    foreach (var item in block.Constructs)
+                    {
+                        ListViewItem lvConstruct = new ListViewItem(item.Name);
+                        lvConstruct.Group = group2;
+                        lvConstruct.SubItems.Add($"等级：{item.Level}；{item.Description}");
+                        lvs.Add(lvConstruct);
+                    }
+                }
+
+
+                listView2.Invoke(new Action(() => {
+                    listView2.BeginUpdate();
+                    listView2.Items.Clear();
+                    listView2.Groups.Clear();
+                    listView2.Groups.AddRange(new ListViewGroup[] { group1, group2 });
+                    listView2.Items.AddRange(lvs.ToArray());
+
+                    listView2.EndUpdate();
+                }));
+
+                return;
+            });
+            thread.Start();
         }
 
         /// <summary>

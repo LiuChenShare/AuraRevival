@@ -20,7 +20,10 @@ namespace AuraRevival.Business.Construct
         /// 区块id
         /// </summary>
         Point Location { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        //int Level { get => Level; set => Level = Level; }
+        /// <summary>
+        /// 等级
+        /// </summary>
+        int Level { get => Level; set => Level = value; }
 
         //int Xxxxxxxx { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 

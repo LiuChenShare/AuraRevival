@@ -23,7 +23,7 @@ namespace AuraRevival
             else
             {
                 this.Hide();
-                Grain.Instance.MainGame.Init("textBox1.Text");
+                Grain.Instance.MainGame.Init(textBox1.Text);
                 Form3 form = new();
                 form.ShowDialog();
                 Close();

@@ -32,6 +32,8 @@ namespace AuraRevival
             this.components = new System.ComponentModel.Container();
             this.panel_Top = new System.Windows.Forms.Panel();
             this.panel_Left = new System.Windows.Forms.Panel();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.listView2 = new System.Windows.Forms.ListView();
             this.panel_Fill = new System.Windows.Forms.Panel();
             this.panel_MapView = new System.Windows.Forms.Panel();
             this.panel_Map = new System.Windows.Forms.Panel();
@@ -46,6 +48,10 @@ namespace AuraRevival
             this.listView1 = new System.Windows.Forms.ListView();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.panel_Left.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.panel_Fill.SuspendLayout();
             this.panel_MapView.SuspendLayout();
             this.panel_Right.SuspendLayout();
@@ -63,12 +69,37 @@ namespace AuraRevival
             // 
             // panel_Left
             // 
+            this.panel_Left.Controls.Add(this.flowLayoutPanel1);
             this.panel_Left.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel_Left.Location = new System.Drawing.Point(0, 44);
             this.panel_Left.Margin = new System.Windows.Forms.Padding(4);
             this.panel_Left.Name = "panel_Left";
             this.panel_Left.Size = new System.Drawing.Size(217, 418);
             this.panel_Left.TabIndex = 1;
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.listView2);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(217, 305);
+            this.flowLayoutPanel1.TabIndex = 2;
+            // 
+            // listView2
+            // 
+            this.listView2.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2});
+            this.listView2.Location = new System.Drawing.Point(3, 3);
+            this.listView2.Name = "listView2";
+            this.listView2.Scrollable = false;
+            this.listView2.ShowItemToolTips = true;
+            this.listView2.Size = new System.Drawing.Size(207, 271);
+            this.listView2.TabIndex = 0;
+            this.listView2.UseCompatibleStateImageBehavior = false;
+            this.listView2.View = System.Windows.Forms.View.Tile;
             // 
             // panel_Fill
             // 
@@ -217,7 +248,15 @@ namespace AuraRevival
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 26);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "属性";
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "信息";
             // 
             // Form3
             // 
@@ -233,6 +272,8 @@ namespace AuraRevival
             this.Name = "Form3";
             this.Text = "Form3";
             this.Shown += new System.EventHandler(this.Form2_Shown);
+            this.panel_Left.ResumeLayout(false);
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.panel_Fill.ResumeLayout(false);
             this.panel_MapView.ResumeLayout(false);
             this.panel_Right.ResumeLayout(false);
@@ -260,6 +301,10 @@ namespace AuraRevival
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.TextBox textBox1;
         private Label label1;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private ListView listView2;
+        private ColumnHeader columnHeader1;
+        private ColumnHeader columnHeader2;
     }
 }
 
