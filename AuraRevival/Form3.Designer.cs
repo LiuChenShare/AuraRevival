@@ -34,6 +34,8 @@ namespace AuraRevival
             this.panel_Left = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.listView2 = new System.Windows.Forms.ListView();
+            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.panel_Fill = new System.Windows.Forms.Panel();
             this.panel_MapView = new System.Windows.Forms.Panel();
             this.panel_Map = new System.Windows.Forms.Panel();
@@ -48,8 +50,6 @@ namespace AuraRevival
             this.listView1 = new System.Windows.Forms.ListView();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
-            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.panel_Left.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.panel_Fill.SuspendLayout();
@@ -101,6 +101,14 @@ namespace AuraRevival
             this.listView2.UseCompatibleStateImageBehavior = false;
             this.listView2.View = System.Windows.Forms.View.Tile;
             // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "属性";
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "信息";
+            // 
             // panel_Fill
             // 
             this.panel_Fill.Controls.Add(this.panel_MapView);
@@ -142,7 +150,6 @@ namespace AuraRevival
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(88, 33);
             this.button8.TabIndex = 9;
-            this.button8.Text = "回到基地";
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
@@ -249,14 +256,6 @@ namespace AuraRevival
             // 
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "属性";
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "信息";
             // 
             // Form3
             // 

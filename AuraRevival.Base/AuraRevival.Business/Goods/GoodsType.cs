@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace AuraRevival.Business.Construct
+namespace AuraRevival.Business.Goods
 {
     /// <summary>
-    /// 建筑类型
+    /// 物品类型
     /// </summary>
-    public enum ConstructType
+    public enum GoodsType
     {
         /// <summary>
-        /// 默认
+        /// 物品
         /// </summary>
-        [Description("默认")]
-        Default = 0,
+        [Description("物品")]
+        Goods = 0,
         /// <summary>
-        /// 基地
+        /// 装备
         /// </summary>
-        [Description("基地")]
-        Base = 1,
-
+        [Description("装备")]
+        Equipment = 1,
     }
 }

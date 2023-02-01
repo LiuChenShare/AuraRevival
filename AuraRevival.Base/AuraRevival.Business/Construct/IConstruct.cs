@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AuraRevival.Business.Goods;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace AuraRevival.Business.Construct
@@ -25,6 +27,11 @@ namespace AuraRevival.Business.Construct
         /// </summary>
         int Level { get => Level; set => Level = value; }
 
+        /// <summary>
+        /// 仓库
+        /// </summary>
+        List<IGoods> Goods { get => Goods; }
+
         //int Xxxxxxxx { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         //IConstruct New();
@@ -34,6 +41,11 @@ namespace AuraRevival.Business.Construct
         /// </summary>
         /// <param name="time"></param>
         void ConstructSecondsEventExecute(DateTime time);
+        /// <summary>
+        /// 执行分事件
+        /// </summary>
+        /// <param name="time"></param>
+        void ConstructMinutesEventExecute(DateTime time);
 
         /// <summary>
         /// 执行脚本事件
@@ -41,6 +53,18 @@ namespace AuraRevival.Business.Construct
         /// <param name="time"></param>
         bool ScriptEvent(int scriptCode, object obj) => throw new NotImplementedException();
 
+        /// <summary>
+        /// 保存物品
+        /// </summary>
+        /// <param name="goodslist"></param>
+        /// <returns></returns>
+        bool AddGoods(List<IGoods> goodslist) => false;
+        /// <summary>
+        /// 移除物品
+        /// </summary>
+        /// <param name="goodslist"></param>
+        /// <returns></returns>
+        bool RemoveGoods(List<IGoods> goodslist) => false;
         //public void Xxx() => throw new NotImplementedException();
     }
 }

@@ -1,10 +1,6 @@
 ﻿using AuraRevival.Business;
 using AuraRevival.Business.Construct;
 using System.Data;
-using System.Reflection.Emit;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace AuraRevival
 {
@@ -32,6 +28,8 @@ namespace AuraRevival
         private void Form2_Shown(object sender, EventArgs e)
         {
             panel_Map.Size = new Size(Grain.Instance.MainGame.MapSize.Item1 * 25 + 1, Grain.Instance.MainGame.MapSize.Item2 * 25 + 1);
+            button8.BackgroundImage = Image.FromFile(Util.房子_灰);
+            button8.BackgroundImageLayout = ImageLayout.Zoom;
             GoHome();
 
             listView1.LabelWrap = true;
@@ -63,7 +61,6 @@ namespace AuraRevival
             Graphics g2 = panel_Map.CreateGraphics();
             Pen pen2 = new Pen(Color.Green);
 
-            //废弃上面的方法，直接画矩形
             g2.DrawRectangle(pen2, CoorOld.Rectangle);
             g2.Dispose();
             #endregion
@@ -316,7 +313,7 @@ namespace AuraRevival
                     //加入建筑右键菜单
                     if (block.Constructs.Any())
                     {
-                        foreach(var construct in block.Constructs)
+                        foreach (var construct in block.Constructs)
                         {
                             ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem();
                             toolStripMenuItem.Text = construct.Name;
@@ -365,11 +362,11 @@ namespace AuraRevival
                     case 0:
                         item.ForeColor = Color.Red;
                         break;
-                    case 1: 
-                        item.ForeColor= Color.Yellow;
+                    case 1:
+                        item.ForeColor = Color.Yellow;
                         break;
                     case 2:
-                        item.ForeColor = Color.Blue; 
+                        item.ForeColor = Color.Blue;
                         break;
                     case 3:
                         item.ForeColor = Color.Black;
@@ -386,9 +383,15 @@ namespace AuraRevival
             }));
         }
 
-        private void ShowInfo(Point point) {
-            
-            Thread thread = new Thread(() => {
+        /// <summary>
+        /// 展示地图区块信息
+        /// </summary>
+        /// <param name="point"></param>
+        private void ShowInfo(Point point)
+        {
+
+            Thread thread = new Thread(() =>
+            {
 
                 List<ListViewItem> lvs = new List<ListViewItem>();
                 List<ListViewGroup> groups = new List<ListViewGroup>();
@@ -427,7 +430,8 @@ namespace AuraRevival
                 }
 
 
-                listView2.Invoke(new Action(() => {
+                listView2.Invoke(new Action(() =>
+                {
                     listView2.BeginUpdate();
                     listView2.Items.Clear();
                     listView2.Groups.Clear();
