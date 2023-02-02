@@ -8,7 +8,7 @@ namespace AuraRevival.Business.Goods.Goods
     /// <summary>
     /// 普通物品
     /// </summary>
-    public class Goods_Base : IGoods
+    public class Goods_Default : IGoods
     {
         public Guid Id { get; set; }
         public int Code { get; set; }

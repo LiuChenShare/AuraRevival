@@ -1,4 +1,5 @@
 ﻿using AuraRevival.Business.Construct;
+using AuraRevival.Business.Entity;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -33,6 +34,11 @@ namespace AuraRevival.Business
         /// 建筑
         /// </summary>
         public List<IConstruct> Constructs = new List<IConstruct>();
+
+        /// <summary>
+        /// 实体
+        /// </summary>
+        public List<IEntity> Entities = new List<IEntity>();
 
     }
 }

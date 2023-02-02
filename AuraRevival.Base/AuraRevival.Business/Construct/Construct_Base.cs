@@ -1,4 +1,5 @@
-﻿using AuraRevival.Business.Goods;
+﻿using AuraRevival.Business.Entity;
+using AuraRevival.Business.Goods;
 using AuraRevival.Business.Goods.Goods;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,6 @@ namespace AuraRevival.Business.Construct
         #endregion
 
         #region 自定义
-        #endregion
 
         /// <summary> 行动值 </summary>
         public int _tallyMap;
@@ -33,6 +33,7 @@ namespace AuraRevival.Business.Construct
         private int _tallyMapTep;
         /// <summary> 当前指令 </summary>
         private int _scriptCode = -1;
+        #endregion
 
         private Construct_Base() { }
         private readonly Dictionary<int, Construct_Base> _levelConfig;
@@ -47,8 +48,8 @@ namespace AuraRevival.Business.Construct
 
 
             //注册秒事件
-            Grain.Instance.MainGame.SecondsEvent += ConstructSecondsEventExecute;
-            Grain.Instance.MainGame.SecondsEvent += ConstructMinutesEventExecute;
+            Grain.Instance.MainGame.SecondsEvent += SecondsEventExecute;
+            Grain.Instance.MainGame.SecondsEvent += MinutesEventExecute;
 
             _levelConfig = new Dictionary<int, Construct_Base>
             {
@@ -58,10 +59,14 @@ namespace AuraRevival.Business.Construct
                 { 4, new Construct_Base() { Description = "拥有了一战之力", _tallyMapTep = 53 } }
             };
             LevelRefresh(Level);
+
+            //初始化一个实体
+            IEntity entity = new Entity_Default();
+            entity.Init("英雄", Location);
         }
 
 
-        public void ConstructSecondsEventExecute(DateTime time)
+        public void SecondsEventExecute(DateTime time)
         {
             if (_scriptCode != -1)
             {
@@ -94,7 +99,7 @@ namespace AuraRevival.Business.Construct
             ProductionSeconds();
         }
 
-        public void ConstructMinutesEventExecute(DateTime time)
+        public void MinutesEventExecute(DateTime time)
         {
 
         }
@@ -125,9 +130,9 @@ namespace AuraRevival.Business.Construct
         /// </summary>
         public void ProductionSeconds()
         {
-            IGoods goods = new Goods_Base();
+            IGoods goods = new Goods_Default();
             goods.Init(1, "木头", 5);
-            IGoods goods2 = new Goods_Base();
+            IGoods goods2 = new Goods_Default();
             goods2.Init(2, "石头", 1);
 
             AddGoods(new List<IGoods>() { goods, goods2 });

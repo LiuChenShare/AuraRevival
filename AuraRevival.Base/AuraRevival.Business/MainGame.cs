@@ -106,17 +106,19 @@ namespace AuraRevival.Business
             if (GameState == 0)
             {
                 Random ran = new Random();
-                int x = ran.Next(MapSize.Item1 - 1);
-                int y = ran.Next(MapSize.Item2 - 1);
+                int x = ran.Next(MapSize.Item1);
+                int y = ran.Next(MapSize.Item2);
                 Point point = new Point(x, y);
 
-                Construct_Base construct_Base = new Construct_Base(constructBaseName, point);
 
                 Block block;
                 if (Grain.Instance.Blocks.Any(x => x.Id == point))
                     block = Grain.Instance.Blocks.Where(x => x.Id == point).FirstOrDefault();
                 else
                     block = NewBlock(point);
+
+                Construct_Base construct_Base = new Construct_Base(constructBaseName, point);
+
 
                 Constructs.Add(construct_Base);
                 Grain.Instance.Constructs.Add(construct_Base);

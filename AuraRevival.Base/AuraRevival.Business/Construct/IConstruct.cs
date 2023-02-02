@@ -40,12 +40,12 @@ namespace AuraRevival.Business.Construct
         /// 执行秒事件
         /// </summary>
         /// <param name="time"></param>
-        void ConstructSecondsEventExecute(DateTime time);
+        void SecondsEventExecute(DateTime time) { }
         /// <summary>
         /// 执行分事件
         /// </summary>
         /// <param name="time"></param>
-        void ConstructMinutesEventExecute(DateTime time);
+        void MinutesEventExecute(DateTime time) { }
 
         /// <summary>
         /// 执行脚本事件

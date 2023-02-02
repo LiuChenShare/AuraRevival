@@ -280,6 +280,7 @@ namespace AuraRevival
 
         /// <summary>
         /// 在鼠标指针在地图上上并释放鼠标键时发生
+        /// 初始化右键菜单
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -493,7 +494,10 @@ namespace AuraRevival
             if (stripItem?.Tag == null) return;
             Tuple<int, object, IConstruct> tag = stripItem.Tag as Tuple<int, object, IConstruct>;
 
-            tag.Item3.ScriptEvent(tag.Item1, tag.Item2);
+            if(tag.Item3.ScriptEvent(tag.Item1, tag.Item2))
+            {
+                MessageBox.Show(tag.Item3.Name, "操作失败", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
 
         }
     }
