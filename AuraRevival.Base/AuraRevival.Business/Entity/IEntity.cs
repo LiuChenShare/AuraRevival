@@ -29,7 +29,7 @@ namespace AuraRevival.Business.Entity
         /// <summary>
         /// 类型
         /// </summary>
-        int Type { get => Type; set => Type = value; }
+        int Type{get=> Type; set => Type = value; }
 
         /// <summary>
         /// 区块id

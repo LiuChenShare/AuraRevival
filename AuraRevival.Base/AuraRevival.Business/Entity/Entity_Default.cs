@@ -19,6 +19,7 @@ namespace AuraRevival.Business.Entity
         public Point Location { get; private set; }
         public string Description { get; private set; }
         public int Level { get; private set; }
+        public int Type { get; private set; }
         #endregion
 
 

@@ -1,5 +1,6 @@
 ﻿using AuraRevival.Business;
 using AuraRevival.Business.Construct;
+using AuraRevival.Business.Entity;
 using System.Data;
 
 namespace AuraRevival
@@ -235,6 +236,24 @@ namespace AuraRevival
                         constructCoor.Rectangle.Height);
                 }
                 #endregion
+
+                #region 绘制实体
+                if (block.Entities.Any())
+                {
+                    IEntity entity = block.Entities.OrderBy(x => x.Type).FirstOrDefault();
+
+                    string imagePath = entity.Type switch
+                    {
+                        0 => Util.士兵,
+                        _ => Util.士兵,
+                    };
+                    g.DrawImage(Image.FromFile(imagePath),
+                        constructCoor.Rectangle.X,
+                        constructCoor.Rectangle.Y,
+                        constructCoor.Rectangle.Width,
+                        constructCoor.Rectangle.Height);
+                }
+                #endregion
             }
             #endregion
 
@@ -396,35 +415,47 @@ namespace AuraRevival
 
                 List<ListViewItem> lvs = new List<ListViewItem>();
                 List<ListViewGroup> groups = new List<ListViewGroup>();
-                ListViewGroup group1 = new ListViewGroup
+                ListViewGroup group_Block = new ListViewGroup
                 {
                     Header = "区块",
                     //Footer = "区块啊"
                 };
-                ListViewGroup group2 = new ListViewGroup
+                ListViewGroup group_Construct = new ListViewGroup
                 {
                     Header = "建筑",
                     //Footer = "建筑啊"
+                };
+                ListViewGroup group_Entitie = new ListViewGroup
+                {
+                    Header = "实体",
+                    //Footer = "实体啊"
                 };
 
                 var block = Grain.Instance.Blocks.FirstOrDefault(x => x.Id == point);
                 if (block == null)
                 {
                     ListViewItem lvBlock = new ListViewItem("区块");
-                    lvBlock.Group = group1;
+                    lvBlock.Group = group_Block;
                     lvBlock.SubItems.Add("未探索");
                     lvs.Add(lvBlock);
                 }
                 else
                 {
                     ListViewItem lvBlock = new ListViewItem("区块");
-                    lvBlock.Group = group1;
+                    lvBlock.Group = group_Block;
                     lvBlock.SubItems.Add($"（{block.Id.X},{block.Id.Y}）");
                     lvs.Add(lvBlock);
                     foreach (var item in block.Constructs)
                     {
                         ListViewItem lvConstruct = new ListViewItem(item.Name);
-                        lvConstruct.Group = group2;
+                        lvConstruct.Group = group_Construct;
+                        lvConstruct.SubItems.Add($"等级：{item.Level}；{item.Description}");
+                        lvs.Add(lvConstruct);
+                    }
+                    foreach (var item in block.Entities)
+                    {
+                        ListViewItem lvConstruct = new ListViewItem(item.Name);
+                        lvConstruct.Group = group_Entitie;
                         lvConstruct.SubItems.Add($"等级：{item.Level}；{item.Description}");
                         lvs.Add(lvConstruct);
                     }
@@ -436,7 +467,7 @@ namespace AuraRevival
                     listView2.BeginUpdate();
                     listView2.Items.Clear();
                     listView2.Groups.Clear();
-                    listView2.Groups.AddRange(new ListViewGroup[] { group1, group2 });
+                    listView2.Groups.AddRange(new ListViewGroup[] { group_Block, group_Construct,group_Entitie });
                     listView2.Items.AddRange(lvs.ToArray());
 
                     listView2.EndUpdate();
