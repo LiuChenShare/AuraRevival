@@ -163,6 +163,8 @@ namespace AuraRevival.Business.Entity
             block_New?.Entities?.Add(this);
             block_Old?.Entities?.Remove(this);
 
+            MainGame.Instance.EntityMove(this, block_Old.Id, block_New.Id);
+
             _tallyMap--;
 
             return result;

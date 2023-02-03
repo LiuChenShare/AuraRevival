@@ -45,6 +45,19 @@ namespace AuraRevival
             MainGame.Instance.GameStart();
             MainGame.Instance.MsgEvent += ShowMsg;
             MainGame.Instance.SecondsEvent += ShowDate;
+            MainGame.Instance.EntityMoveEvent += EntityMoveEvent;
+        }
+
+        /// <summary>
+        /// 当实体移动时发生
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="L_old"></param>
+        /// <param name="L_new"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        private void EntityMoveEvent(IEntity entity, Point L_old, Point L_new)
+        {
+            FormRefresh();
         }
 
 
@@ -575,9 +588,8 @@ namespace AuraRevival
             {
                 MessageBox.Show( $"{stripItem.Text}操作失败", tag.Item3.Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
-            FormRefresh();
         }
+
         /// <summary>
         /// 实体右键菜单点击事件
         /// </summary>
@@ -593,8 +605,6 @@ namespace AuraRevival
             {
                 MessageBox.Show($"{stripItem.Text}操作失败", tag.Item3.Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
-            FormRefresh();
         }
     }
 }
