@@ -292,6 +292,11 @@ namespace AuraRevival
             }
         }
 
+        /// <summary>
+        /// 地图重绘事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
             FormRefresh();
@@ -328,8 +333,6 @@ namespace AuraRevival
                 {
                     menuItem_Title.ForeColor = Color.Black;
                     Block block = Grain.Instance.Blocks.FirstOrDefault(x => x.Id == coor.CoorPoint);
-                    //加入实体右键菜单
-
                     //加入建筑右键菜单
                     if (block.Constructs.Any())
                     {
@@ -341,10 +344,53 @@ namespace AuraRevival
                             {
                                 ToolStripMenuItem stripMenu_UpLevel = new ToolStripMenuItem();
                                 stripMenu_UpLevel.Text = "升级";
-                                stripMenu_UpLevel.Click += toolStripMenuItem_Click;
+                                stripMenu_UpLevel.Click += toolStripMenuItem_ConstructClick;
                                 stripMenu_UpLevel.Tag = new Tuple<int, object, IConstruct>(1, null, construct);
                                 toolStripMenuItem.DropDownItems.Add(stripMenu_UpLevel);
                             }
+                            stripItemsConstruct.Add(toolStripMenuItem);
+                        }
+                        stripItemsConstruct.Add(new ToolStripSeparator());
+                    }
+
+                    //加入实体右键菜单
+                    if (block.Entities.Any())
+                    {
+                        foreach (var entity in block.Entities)
+                        {
+                            ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem();
+                            toolStripMenuItem.Text = entity.Name;
+
+                            ToolStripMenuItem stripMenu_Move = new ToolStripMenuItem();
+                            stripMenu_Move.Text = "移动";
+
+                            //上
+                            ToolStripMenuItem stripMenu_MoveUp = new ToolStripMenuItem();
+                            stripMenu_MoveUp.Text = "向上";
+                            stripMenu_MoveUp.Click += toolStripMenuItem_EntityClick;
+                            stripMenu_MoveUp.Tag = new Tuple<int, object, IEntity>(200, "W", entity);
+                            //下
+                            ToolStripMenuItem stripMenu_MoveDown = new ToolStripMenuItem();
+                            stripMenu_MoveDown.Text = "向下";
+                            stripMenu_MoveDown.Click += toolStripMenuItem_EntityClick;
+                            stripMenu_MoveDown.Tag = new Tuple<int, object, IEntity>(200, "S", entity);
+                            //左
+                            ToolStripMenuItem stripMenu_MoveLeft = new ToolStripMenuItem();
+                            stripMenu_MoveLeft.Text = "向左";
+                            stripMenu_MoveLeft.Click += toolStripMenuItem_EntityClick;
+                            stripMenu_MoveLeft.Tag = new Tuple<int, object, IEntity>(200, "A", entity);
+                            //右
+                            ToolStripMenuItem stripMenu_MoveRight = new ToolStripMenuItem();
+                            stripMenu_MoveRight.Text = "向右";
+                            stripMenu_MoveRight.Click += toolStripMenuItem_EntityClick;
+                            stripMenu_MoveRight.Tag = new Tuple<int, object, IEntity>(200, "D", entity);
+
+                            stripMenu_Move.DropDownItems.Add(stripMenu_MoveUp);
+                            stripMenu_Move.DropDownItems.Add(stripMenu_MoveDown);
+                            stripMenu_Move.DropDownItems.Add(stripMenu_MoveLeft);
+                            stripMenu_Move.DropDownItems.Add(stripMenu_MoveRight);
+                            toolStripMenuItem.DropDownItems.Add(stripMenu_Move);
+                            
                             stripItemsConstruct.Add(toolStripMenuItem);
                         }
                         stripItemsConstruct.Add(new ToolStripSeparator());
@@ -515,21 +561,40 @@ namespace AuraRevival
         }
 
         /// <summary>
-        /// 右键菜单点击事件
+        /// 建筑右键菜单点击事件
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void toolStripMenuItem_Click(object? sender, EventArgs e)
+        private void toolStripMenuItem_ConstructClick(object? sender, EventArgs e)
         {
             ToolStripItem? stripItem = sender as ToolStripItem;
             if (stripItem?.Tag == null) return;
             Tuple<int, object, IConstruct> tag = stripItem.Tag as Tuple<int, object, IConstruct>;
 
-            if(tag.Item3.ScriptEvent(tag.Item1, tag.Item2))
+            if(!tag.Item3.ScriptEvent(tag.Item1, tag.Item2))
             {
-                MessageBox.Show(tag.Item3.Name, "操作失败", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show( $"{stripItem.Text}操作失败", tag.Item3.Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
+            FormRefresh();
+        }
+        /// <summary>
+        /// 实体右键菜单点击事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void toolStripMenuItem_EntityClick(object? sender, EventArgs e)
+        {
+            ToolStripItem? stripItem = sender as ToolStripItem;
+            if (stripItem?.Tag == null) return;
+            Tuple<int, object, IEntity> tag = stripItem.Tag as Tuple<int, object, IEntity>;
+
+            if (!tag.Item3.ScriptEvent(tag.Item1, tag.Item2))
+            {
+                MessageBox.Show($"{stripItem.Text}操作失败", tag.Item3.Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            FormRefresh();
         }
     }
 }

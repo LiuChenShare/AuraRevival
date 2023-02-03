@@ -44,6 +44,7 @@ namespace AuraRevival.Business.Entity
             Id = Guid.NewGuid();
             Name = name;
             Location = location;
+            Level = 1;
 
 
             //注册秒事件
@@ -116,7 +117,7 @@ namespace AuraRevival.Business.Entity
         bool _script_2_00(object obj)
         {
             bool result = false;
-            if (_tallyMap < 0)
+            if (_tallyMap < 1)
                 return result;
 
             Block block_Old = Grain.Instance.Blocks.FirstOrDefault(x => x.Id == Location);
@@ -133,19 +134,19 @@ namespace AuraRevival.Business.Entity
                 case "W":
                     if (Location.Y - 1 < 0)
                         break;
-                    Location = new Point(Location.X - 1, Location.Y);
+                    Location = new Point(Location.X, Location.Y - 1);
                     result = true;
                     break;
                 case "D":
                     if (Location.X + 1 > MainGame.Instance.MapSize.Item1)
                         break;
-                    Location = new Point(Location.X - 1, Location.Y);
+                    Location = new Point(Location.X + 1, Location.Y);
                     result = true;
                     break;
                 case "S":
                     if (Location.Y + 1 > MainGame.Instance.MapSize.Item2)
                         break;
-                    Location = new Point(Location.X - 1, Location.Y);
+                    Location = new Point(Location.X, Location.Y + 1);
                     result = true;
                     break;
                 default:
@@ -156,6 +157,9 @@ namespace AuraRevival.Business.Entity
                 return result;
 
             Block block_New = Grain.Instance.Blocks.FirstOrDefault(x => x.Id == Location);
+
+            block_New ??= MainGame.Instance.NewBlock(Location);
+
             block_New?.Entities?.Add(this);
             block_Old?.Entities?.Remove(this);
 
