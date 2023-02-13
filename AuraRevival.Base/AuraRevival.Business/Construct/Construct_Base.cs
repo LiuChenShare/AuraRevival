@@ -62,7 +62,7 @@ namespace AuraRevival.Business.Construct
 
             //初始化一个实体
             IEntity entity = new Entity_Default();
-            entity.Init("英雄", Location);
+            entity.Init("英雄",0, Id, Location);
         }
 
 
@@ -171,7 +171,7 @@ namespace AuraRevival.Business.Construct
                 }
             }
 
-            Grain.Instance.MainGame.Msg(2, Name, $"仓库更新了");
+            //Grain.Instance.MainGame.Msg(2, Name, $"仓库更新了");
             return true;
         }
         /// <summary>

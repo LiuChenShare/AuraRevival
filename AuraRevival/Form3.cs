@@ -2,6 +2,7 @@
 using AuraRevival.Business.Construct;
 using AuraRevival.Business.Entity;
 using System.Data;
+using System.Drawing;
 
 namespace AuraRevival
 {
@@ -55,7 +56,7 @@ namespace AuraRevival
         /// <param name="L_old"></param>
         /// <param name="L_new"></param>
         /// <exception cref="NotImplementedException"></exception>
-        private void EntityMoveEvent(IEntity entity, Point L_old, Point L_new)
+        private void EntityMoveEvent(IEntity entity, Point? L_old, Point? L_new)
         {
             FormRefresh();
         }
@@ -258,6 +259,7 @@ namespace AuraRevival
                     string imagePath = entity.Type switch
                     {
                         0 => Util.士兵,
+                        2 => Util.小怪,
                         _ => Util.士兵,
                     };
                     g.DrawImage(Image.FromFile(imagePath),
@@ -381,22 +383,22 @@ namespace AuraRevival
                             ToolStripMenuItem stripMenu_MoveUp = new ToolStripMenuItem();
                             stripMenu_MoveUp.Text = "向上";
                             stripMenu_MoveUp.Click += toolStripMenuItem_EntityClick;
-                            stripMenu_MoveUp.Tag = new Tuple<int, object, IEntity>(200, "W", entity);
+                            stripMenu_MoveUp.Tag = new Tuple<int, object, IEntity>((int)ScriptComd.Entity_Move, "W", entity);
                             //下
                             ToolStripMenuItem stripMenu_MoveDown = new ToolStripMenuItem();
                             stripMenu_MoveDown.Text = "向下";
                             stripMenu_MoveDown.Click += toolStripMenuItem_EntityClick;
-                            stripMenu_MoveDown.Tag = new Tuple<int, object, IEntity>(200, "S", entity);
+                            stripMenu_MoveDown.Tag = new Tuple<int, object, IEntity>((int)ScriptComd.Entity_Move, "S", entity);
                             //左
                             ToolStripMenuItem stripMenu_MoveLeft = new ToolStripMenuItem();
                             stripMenu_MoveLeft.Text = "向左";
                             stripMenu_MoveLeft.Click += toolStripMenuItem_EntityClick;
-                            stripMenu_MoveLeft.Tag = new Tuple<int, object, IEntity>(200, "A", entity);
+                            stripMenu_MoveLeft.Tag = new Tuple<int, object, IEntity>((int)ScriptComd.Entity_Move, "A", entity);
                             //右
                             ToolStripMenuItem stripMenu_MoveRight = new ToolStripMenuItem();
                             stripMenu_MoveRight.Text = "向右";
                             stripMenu_MoveRight.Click += toolStripMenuItem_EntityClick;
-                            stripMenu_MoveRight.Tag = new Tuple<int, object, IEntity>(200, "D", entity);
+                            stripMenu_MoveRight.Tag = new Tuple<int, object, IEntity>((int)ScriptComd.Entity_Move, "D", entity);
 
                             stripMenu_Move.DropDownItems.Add(stripMenu_MoveUp);
                             stripMenu_Move.DropDownItems.Add(stripMenu_MoveDown);
@@ -442,7 +444,7 @@ namespace AuraRevival
                         item.ForeColor = Color.Red;
                         break;
                     case 1:
-                        item.ForeColor = Color.Yellow;
+                        item.ForeColor = Color.Brown;
                         break;
                     case 2:
                         item.ForeColor = Color.Blue;
@@ -605,6 +607,12 @@ namespace AuraRevival
             {
                 MessageBox.Show($"{stripItem.Text}操作失败", tag.Item3.Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var block = Grain.Instance.Blocks.FirstOrDefault(x => x.Id == CoorOld.CoorPoint);
+            block.AddEnemy();
         }
     }
 }

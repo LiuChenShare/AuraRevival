@@ -50,6 +50,7 @@ namespace AuraRevival
             this.listView1 = new System.Windows.Forms.ListView();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.button2 = new System.Windows.Forms.Button();
             this.panel_Left.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.panel_Fill.SuspendLayout();
@@ -199,6 +200,7 @@ namespace AuraRevival
             // 
             // panel_Right
             // 
+            this.panel_Right.Controls.Add(this.button2);
             this.panel_Right.Controls.Add(this.label1);
             this.panel_Right.Controls.Add(this.button8);
             this.panel_Right.Controls.Add(this.button6);
@@ -257,6 +259,16 @@ namespace AuraRevival
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(43, 286);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 10;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
@@ -304,6 +316,7 @@ namespace AuraRevival
         private ListView listView2;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
+        private Button button2;
     }
 }
 

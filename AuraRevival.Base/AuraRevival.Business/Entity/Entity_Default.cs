@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace AuraRevival.Business.Entity
@@ -20,6 +21,35 @@ namespace AuraRevival.Business.Entity
         public string Description { get; private set; }
         public int Level { get; private set; }
         public int Type { get; private set; }
+        public Guid MId { get; private set; }
+        public EntityStateType State { get; private set; } = EntityStateType.Default;
+
+        #region 战斗相关
+        /// <summary>
+        /// 力量
+        /// </summary>
+        public int Power { get; private set; }
+        /// <summary>
+        /// 敏捷
+        /// </summary>
+        public int Agile { get; private set; }
+        /// <summary>
+        /// 生命值
+        /// </summary>
+        public int HP { get; private set; }
+        /// <summary>
+        /// 生命值（最大值）
+        /// </summary>
+        public int HPMax
+        {
+            get
+            {
+                var a = 1.55;
+                return (int)(Power * a);
+            }
+            private set { HPMax = value; }
+        }
+        #endregion
         #endregion
 
 
@@ -39,12 +69,29 @@ namespace AuraRevival.Business.Entity
         #endregion
 
 
-        public void Init(string name,Point location)
+        public void Init(string name, int type, Guid mid, Point location)
         {
             Id = Guid.NewGuid();
-            Name = name;
+            Name = string.IsNullOrWhiteSpace(name) ? EntityHelper.GetRandomName() : name;
+            Type = type;
             Location = location;
             Level = 1;
+            MId = mid;
+
+            if (name == "英雄")
+            {
+                Power = 10;
+                Agile = 10;
+                HP = HPMax;
+            }
+            else
+            {
+                Random rnd = new Random((int)DateTime.Now.ToFileTimeUtc());
+                Power = rnd.Next(1, 11);
+                Agile = rnd.Next(1, 11);
+                HP = HPMax;
+            }
+
 
 
             //注册秒事件
@@ -53,27 +100,36 @@ namespace AuraRevival.Business.Entity
 
             _levelConfig = new Dictionary<int, Entity_Default>
             {
-                { 1, new Entity_Default() { Description = "这个是你最后的希望", _tallyMapTep = 5 } },
-                { 2, new Entity_Default() { Description = "稍微有了点起色", _tallyMapTep = 7 } },
-                { 3, new Entity_Default() { Description = "还不错呦", _tallyMapTep = 10 } },
-                { 4, new Entity_Default() { Description = "拥有了一战之力", _tallyMapTep = 12 } }
+                { 1, new Entity_Default() { Description = "", _tallyMapTep = 5 } },
+                { 2, new Entity_Default() { Description = "", _tallyMapTep = 7 } },
+                { 3, new Entity_Default() { Description = "", _tallyMapTep = 10 } },
+                { 4, new Entity_Default() { Description = "", _tallyMapTep = 12 } }
             };
             LevelRefresh(Level);
 
 
             Block block = Grain.Instance.Blocks.FirstOrDefault(x => x.Id == Location);
-            block?.Entities?.Add(this);
+            block?.AddEntities(this);
             Grain.Instance.Entities.Add(this);
+
+
+            MainGame.Instance.EntityMove(this, null, block?.Id);
         }
         public bool ScriptEvent(int scriptCode, object obj)
         {
             _scriptCode = _scriptCode != -1 ? _scriptCode : scriptCode;
             switch (scriptCode)
             {
-                case 200: //移动
+                case (int)ScriptComd.Entity_Move: //移动
                     {
                         _scriptCode = -1;
                         bool result = _script_2_00(obj);
+                        return result;
+                    }
+                case (int)ScriptComd.Entity_Battle: //进入战斗
+                    {
+                        _scriptCode = -1;
+                        bool result = _script_2_01(obj);
                         return result;
                     }
                 default:
@@ -108,6 +164,7 @@ namespace AuraRevival.Business.Entity
             _tallyMap = _tallyMapTep;
         }
 
+        #region 指令
 
         /// <summary>
         /// 移动
@@ -160,7 +217,7 @@ namespace AuraRevival.Business.Entity
 
             block_New ??= MainGame.Instance.NewBlock(Location);
 
-            block_New?.Entities?.Add(this);
+            block_New?.AddEntities(this);
             block_Old?.Entities?.Remove(this);
 
             MainGame.Instance.EntityMove(this, block_Old.Id, block_New.Id);
@@ -168,6 +225,84 @@ namespace AuraRevival.Business.Entity
             _tallyMap--;
 
             return result;
+        }
+
+        /// <summary>
+        /// 进入战斗
+        /// </summary>
+        /// <param name="obj">指令内容</param>
+        /// <returns></returns>
+        bool _script_2_01(object obj)
+        {
+            bool result = false;
+            if(State == EntityStateType.Die) 
+                return result;
+
+            if (State == EntityStateType.InBattle)
+                result = true;
+
+
+
+            Block block_Old = Grain.Instance.Blocks.FirstOrDefault(x => x.Id == Location);
+
+            string key = obj as string;
+            switch (key)
+            {
+                case "A":
+                    if (Location.X - 1 < 0)
+                        break;
+                    Location = new Point(Location.X - 1, Location.Y);
+                    result = true;
+                    break;
+                case "W":
+                    if (Location.Y - 1 < 0)
+                        break;
+                    Location = new Point(Location.X, Location.Y - 1);
+                    result = true;
+                    break;
+                case "D":
+                    if (Location.X + 1 > MainGame.Instance.MapSize.Item1)
+                        break;
+                    Location = new Point(Location.X + 1, Location.Y);
+                    result = true;
+                    break;
+                case "S":
+                    if (Location.Y + 1 > MainGame.Instance.MapSize.Item2)
+                        break;
+                    Location = new Point(Location.X, Location.Y + 1);
+                    result = true;
+                    break;
+                default:
+                    break;
+            }
+
+            if (!result)
+                return result;
+
+            Block block_New = Grain.Instance.Blocks.FirstOrDefault(x => x.Id == Location);
+
+            block_New ??= MainGame.Instance.NewBlock(Location);
+
+            block_New?.AddEntities(this);
+            block_Old?.Entities?.Remove(this);
+
+            MainGame.Instance.EntityMove(this, block_Old.Id, block_New.Id);
+
+            _tallyMap--;
+
+            return result;
+        }
+
+        #endregion
+
+        public void SetHP(int hp)
+        {
+            HP = hp;
+
+            if (hp == 0)
+            {
+                State = EntityStateType.Die;
+            }
         }
     }
 }
