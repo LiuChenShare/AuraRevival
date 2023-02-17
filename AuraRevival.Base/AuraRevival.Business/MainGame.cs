@@ -59,16 +59,32 @@ namespace AuraRevival.Business
         /// <summary>
         /// 实体移动委托
         /// </summary>
-        /// <param name="entity">来源类型:0-游戏公告，1-区块，2-建筑，3-实体</param>
+        /// <param name="entity">实体</param>
         /// <param name="L_old">旧坐标</param>
         /// <param name="L_new">新坐标</param>
         public delegate void EntityMoveHandler(IEntity entity, Point? L_old, Point? L_new);
         public event EntityMoveHandler EntityMoveEvent;
 
         /// <summary>
+        /// 区块更新委托
+        /// </summary>
+        /// <param name="block">区块</param>
+        public delegate void BlockUpdateHandler(Block block);
+        /// <summary>
+        /// 区块更新事件
+        /// </summary>
+        public event BlockUpdateHandler BlockUpdateEvent;
+
+        /// <summary>
         /// 万能委托
         /// </summary>
         public delegate void AllHandler(object[] objects);
+
+        /// <summary>
+        /// 单int值委托
+        /// </summary>
+        /// <param name="time"></param>
+        public delegate void IntHandler(int index);
         #endregion
 
         /// <summary>
@@ -171,6 +187,16 @@ namespace AuraRevival.Business
         public Task EntityMove(IEntity entity, Point? L_old, Point? L_new)
         {
             EntityMoveEvent?.Invoke(entity, L_old, L_new);
+            return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// 区块更新
+        /// </summary>
+        /// <returns></returns>
+        public Task BlockUpdate(Block block)
+        {
+            BlockUpdateEvent?.Invoke(block);
             return Task.CompletedTask;
         }
 

@@ -132,6 +132,12 @@ namespace AuraRevival.Business.Entity
                         bool result = _script_2_01(obj);
                         return result;
                     }
+                case (int)ScriptComd.Entity_BattleOut: //退出战斗
+                    {
+                        _scriptCode = -1;
+                        bool result = _script_2_02(obj);
+                        return result;
+                    }
                 default:
                     break;
             }
@@ -148,6 +154,10 @@ namespace AuraRevival.Business.Entity
             if (_tallyMap < _tallyMapTep)
                 _tallyMap++;
 
+
+            //回血
+            if (State == EntityStateType.Default && HP < HPMax)
+                HP++;
         }
 
 
@@ -241,54 +251,33 @@ namespace AuraRevival.Business.Entity
             if (State == EntityStateType.InBattle)
                 result = true;
 
-
-
-            Block block_Old = Grain.Instance.Blocks.FirstOrDefault(x => x.Id == Location);
-
-            string key = obj as string;
-            switch (key)
+            if (State == EntityStateType.Default)
             {
-                case "A":
-                    if (Location.X - 1 < 0)
-                        break;
-                    Location = new Point(Location.X - 1, Location.Y);
-                    result = true;
-                    break;
-                case "W":
-                    if (Location.Y - 1 < 0)
-                        break;
-                    Location = new Point(Location.X, Location.Y - 1);
-                    result = true;
-                    break;
-                case "D":
-                    if (Location.X + 1 > MainGame.Instance.MapSize.Item1)
-                        break;
-                    Location = new Point(Location.X + 1, Location.Y);
-                    result = true;
-                    break;
-                case "S":
-                    if (Location.Y + 1 > MainGame.Instance.MapSize.Item2)
-                        break;
-                    Location = new Point(Location.X, Location.Y + 1);
-                    result = true;
-                    break;
-                default:
-                    break;
+                State = EntityStateType.InBattle;
+                result = true;
             }
 
-            if (!result)
+            return result;
+        }
+        /// <summary>
+        /// 退出战斗
+        /// </summary>
+        /// <param name="obj">指令内容</param>
+        /// <returns></returns>
+        bool _script_2_02(object obj)
+        {
+            bool result = false;
+            if (State == EntityStateType.Die)
                 return result;
 
-            Block block_New = Grain.Instance.Blocks.FirstOrDefault(x => x.Id == Location);
+            if (State == EntityStateType.Default)
+                result = true;
 
-            block_New ??= MainGame.Instance.NewBlock(Location);
-
-            block_New?.AddEntities(this);
-            block_Old?.Entities?.Remove(this);
-
-            MainGame.Instance.EntityMove(this, block_Old.Id, block_New.Id);
-
-            _tallyMap--;
+            if (State == EntityStateType.InBattle)
+            {
+                State = EntityStateType.Default;
+                result = true;
+            }
 
             return result;
         }
@@ -302,6 +291,12 @@ namespace AuraRevival.Business.Entity
             if (hp == 0)
             {
                 State = EntityStateType.Die;
+
+                Block block_New = Grain.Instance.Blocks.FirstOrDefault(x => x.Id == Location);
+
+                block_New?.Entities?.Remove(this);
+
+                MainGame.Instance.EntityMove(this, block_New.Id, null);
             }
         }
     }

@@ -22,9 +22,15 @@ namespace AuraRevival.Business.Battle
         InBattle = 1,
 
         /// <summary>
-        /// 战斗中
+        /// 战斗结束
         /// </summary>
         [Description("战斗结束")]
-        BattleOver = 1,
+        BattleOver = 2,
+
+        /// <summary>
+        /// 已结算
+        /// </summary>
+        [Description("已结算")]
+        Settled = 3,
     }
 }

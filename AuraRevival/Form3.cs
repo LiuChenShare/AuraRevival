@@ -1,4 +1,5 @@
 ﻿using AuraRevival.Business;
+using AuraRevival.Business.Battle;
 using AuraRevival.Business.Construct;
 using AuraRevival.Business.Entity;
 using System.Data;
@@ -47,6 +48,17 @@ namespace AuraRevival
             MainGame.Instance.MsgEvent += ShowMsg;
             MainGame.Instance.SecondsEvent += ShowDate;
             MainGame.Instance.EntityMoveEvent += EntityMoveEvent;
+            MainGame.Instance.BlockUpdateEvent += BlockUpdateEvent;
+        }
+
+        /// <summary>
+        /// 实体更新
+        /// </summary>
+        /// <param name="block"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        private void BlockUpdateEvent(Block block)
+        {
+            FormRefresh();
         }
 
         /// <summary>
@@ -55,7 +67,6 @@ namespace AuraRevival
         /// <param name="entity"></param>
         /// <param name="L_old"></param>
         /// <param name="L_new"></param>
-        /// <exception cref="NotImplementedException"></exception>
         private void EntityMoveEvent(IEntity entity, Point? L_old, Point? L_new)
         {
             FormRefresh();
@@ -261,6 +272,24 @@ namespace AuraRevival
                         0 => Util.士兵,
                         2 => Util.小怪,
                         _ => Util.士兵,
+                    };
+                    g.DrawImage(Image.FromFile(imagePath),
+                        constructCoor.Rectangle.X,
+                        constructCoor.Rectangle.Y,
+                        constructCoor.Rectangle.Width,
+                        constructCoor.Rectangle.Height);
+                }
+                #endregion
+
+                #region 绘制战斗图标
+                var aaa = block.BattleRooms.LastOrDefault(x => x.State == BattleStateType.InBattle || x.State == BattleStateType.BattleOver);
+                if (aaa != null)
+                {
+                    string imagePath = aaa.State switch
+                    {
+                        BattleStateType.InBattle => Util.对战_红,
+                        BattleStateType.BattleOver => Util.对战_黑,
+                        _ => Util.对战_黑,
                     };
                     g.DrawImage(Image.FromFile(imagePath),
                         constructCoor.Rectangle.X,

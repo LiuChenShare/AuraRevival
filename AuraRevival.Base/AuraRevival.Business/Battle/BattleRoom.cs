@@ -25,20 +25,16 @@ namespace AuraRevival.Business.Battle
 
 
         /// <summary>回合事件 </summary>
-        public event TimeHandler RoundEvent;
+        public event IntHandler RoundEvent;
 
-        public BattleRoom()
+        public BattleRoom(List<IEntity> entities)
         {
-
-
-            MainGame.Instance.SecondsEvent += RoundEventExecute;
-
-
+            AddEntity(entities);
         }
 
         public void AddEntity(List<IEntity> entities)
         {
-            List<Guid> mIds = entities.Select(x => x.MId).ToList();
+            List<Guid> mIds = entities.Select(x => x.MId).Distinct().ToList();
             Dictionary<Guid,List<Guid>> group = new Dictionary<Guid,List<Guid>>();
             foreach (var mid in mIds)
             {
@@ -59,6 +55,7 @@ namespace AuraRevival.Business.Battle
             if (State == BattleStateType.Default)
             {
                 State = BattleStateType.InBattle;
+                MainGame.Instance.SecondsEvent += RoundEventExecute;
             }
         }
 
@@ -67,8 +64,22 @@ namespace AuraRevival.Business.Battle
         {
             if (State == BattleStateType.InBattle)
             {
+                if(BattleEntities.Select(x => x.Entity.MId).Distinct().Count() < 2)
+                {
+                    State = BattleStateType.BattleOver;
+                    MainGame.Instance.SecondsEvent -= RoundEventExecute;
+
+                    foreach (var en in BattleEntities)
+                    {
+                        en.EndBattle();
+                    }
+
+                    return;
+                }
+
+
                 Round++;
-                RoundEvent?.Invoke(time);
+                RoundEvent?.Invoke(Round);
             }
         }
 
@@ -104,6 +115,8 @@ namespace AuraRevival.Business.Battle
             if (health == 0)
             {
                 RoundEvent -= defender.RoundEvent;
+
+                BattleEntities.Remove(defender);
 
                 foreach (var en in BattleEntities)
                 {

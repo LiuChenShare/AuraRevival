@@ -55,8 +55,8 @@ namespace AuraRevival.Business
                 var battleRoom = BattleRooms.LastOrDefault(x=>x.State == BattleStateType.InBattle);
                 if (battleRoom == null)
                 {
-                    battleRoom = new BattleRoom();
-                    battleRoom.AddEntity(Entities);
+                    battleRoom = new BattleRoom(Entities);
+                    //battleRoom.AddEntity(Entities);
                     BattleRooms.Add(battleRoom);
                     battleRoom.BattleStart();
                 }

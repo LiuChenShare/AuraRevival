@@ -38,12 +38,14 @@ namespace AuraRevival.Business.Battle
             Entity = entity;
             FoeIds = foeIds;
             _tallyBattleMax = 20 * (100 / (100 + Entity.Agile));
+
+            Entity.ScriptEvent((int)ScriptComd.Entity_Battle, null);
         }
 
-        public void RoundEvent(DateTime time)
+        public void RoundEvent(int round)
         {
 
-            if (Entity.State == EntityStateType.Die)
+            if (Entity.State != EntityStateType.InBattle)
                 return;
 
             if (_tallyBattle < _tallyBattleMax)
@@ -88,6 +90,15 @@ namespace AuraRevival.Business.Battle
                 if (FoeIds.Contains(id))
                     FoeIds.Remove(id);
             }
+        }
+
+        public void EndBattle()
+        {
+            Entity.ScriptEvent((int)ScriptComd.Entity_BattleOut, null);
+
+            if (Entity.State == EntityStateType.InBattle)
+                Entity.State= EntityStateType.Default;
+
         }
     }
 }

@@ -21,5 +21,10 @@ namespace AuraRevival.Business
         /// </summary>
         [Description("进入战斗状态")]
         Entity_Battle = 201,
+        /// <summary>
+        /// 实体_退出战斗状态
+        /// </summary>
+        [Description("进入战斗状态")]
+        Entity_BattleOut = 202,
     }
 }
