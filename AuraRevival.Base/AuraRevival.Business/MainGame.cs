@@ -68,8 +68,8 @@ namespace AuraRevival.Business
         /// <summary>
         /// 区块更新委托
         /// </summary>
-        /// <param name="block">区块</param>
-        public delegate void BlockUpdateHandler(Block block);
+        /// <param name="blockId">区块id</param>
+        public delegate void BlockUpdateHandler(Point blockId);
         /// <summary>
         /// 区块更新事件
         /// </summary>
@@ -194,9 +194,9 @@ namespace AuraRevival.Business
         /// 区块更新
         /// </summary>
         /// <returns></returns>
-        public Task BlockUpdate(Block block)
+        public Task BlockUpdate(Point blockId)
         {
-            BlockUpdateEvent?.Invoke(block);
+            BlockUpdateEvent?.Invoke(blockId);
             return Task.CompletedTask;
         }
 

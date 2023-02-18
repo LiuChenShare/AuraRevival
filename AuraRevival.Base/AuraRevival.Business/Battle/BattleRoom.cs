@@ -69,6 +69,8 @@ namespace AuraRevival.Business.Battle
                     State = BattleStateType.BattleOver;
                     MainGame.Instance.SecondsEvent -= RoundEventExecute;
 
+                    MainGame.Instance.BlockUpdate(BlockId);
+
                     foreach (var en in BattleEntities)
                     {
                         en.EndBattle();

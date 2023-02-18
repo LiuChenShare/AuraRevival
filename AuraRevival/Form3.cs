@@ -54,9 +54,9 @@ namespace AuraRevival
         /// <summary>
         /// 实体更新
         /// </summary>
-        /// <param name="block"></param>
+        /// <param name="blockId"></param>
         /// <exception cref="NotImplementedException"></exception>
-        private void BlockUpdateEvent(Block block)
+        private void BlockUpdateEvent(Point blockId)
         {
             FormRefresh();
         }
