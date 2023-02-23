@@ -13,7 +13,7 @@ namespace AuraRevivalTest
         public void TestMethod1(int index)
         {
             AuraRevival.Business.MainGame game = AuraRevival.Business.MainGame.Instance;
-            game.SecondsEvent += (DateTime time) => { ShowMsg($"ShowMsg：嘀嘀嘀，已经 {time.ToString("yyyy-MM-dd HH:mm:ss")} 了"); };
+            game.SecondsEvent += async (DateTime time) => { ShowMsg($"ShowMsg：嘀嘀嘀，已经 {time.ToString("yyyy-MM-dd HH:mm:ss")} 了"); };
             game.GameStart();
             Thread.Sleep(200 * 1000);
             Assert.AreEqual(1, index);
@@ -37,7 +37,7 @@ namespace AuraRevivalTest
             game.GameStart();
             AuraRevival.Business.Construct.Construct_Base? construct = Grain.Instance.Constructs.FirstOrDefault(x => x.Type == AuraRevival.Business.Construct.ConstructType.Base) as AuraRevival.Business.Construct.Construct_Base;
             
-            game.SecondsEvent += (DateTime time) => { ShowMsg($"ShowMsg：倒计时 {construct?._tallyMap} "); };
+            game.SecondsEvent += async (DateTime time) => { ShowMsg($"ShowMsg：倒计时 {construct?._tallyMap} "); };
 
             construct?.ScriptEvent(1, null);
 

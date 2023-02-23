@@ -6,6 +6,8 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace AuraRevival.Business.Entity
 {
@@ -19,10 +21,22 @@ namespace AuraRevival.Business.Entity
         public string Name { get; private set; }
         public Point Location { get; private set; }
         public string Description { get; private set; }
-        public int Level { get; private set; }
         public int Type { get; private set; }
         public Guid MId { get; private set; }
         public EntityStateType State { get; private set; } = EntityStateType.Default;
+
+
+        #region 等级相关
+
+        public int Level { get; private set; }
+
+        public int Exp { get; private set; }
+        /// <summary>
+        /// 经验值（上限）
+        /// </summary>
+        public int ExpMax { get; private set; }
+        #endregion
+
 
         #region 战斗相关
         /// <summary>
@@ -77,6 +91,10 @@ namespace AuraRevival.Business.Entity
             Location = location;
             Level = 1;
             MId = mid;
+            ExpMax = 100;
+            Exp = 0;
+            _tallyMapTep = 5;
+            _tallyMap = 0;
 
             if (name == "英雄")
             {
@@ -101,8 +119,8 @@ namespace AuraRevival.Business.Entity
             _levelConfig = new Dictionary<int, Entity_Default>
             {
                 { 1, new Entity_Default() { Description = "", _tallyMapTep = 5 } },
-                { 2, new Entity_Default() { Description = "", _tallyMapTep = 7 } },
-                { 3, new Entity_Default() { Description = "", _tallyMapTep = 10 } },
+                { 2, new Entity_Default() { Description = "", _tallyMapTep = 7  } },
+                { 3, new Entity_Default() { Description = "", _tallyMapTep = 10} },
                 { 4, new Entity_Default() { Description = "", _tallyMapTep = 12 } }
             };
             LevelRefresh(Level);
@@ -145,11 +163,11 @@ namespace AuraRevival.Business.Entity
             return false;
         }
 
-        public void SecondsEventExecute(DateTime time)
+        public async Task SecondsEventExecute(DateTime time)
         {
         }
 
-        public void MinutesEventExecute(DateTime time)
+        public async Task MinutesEventExecute(DateTime time)
         {
             if (_tallyMap < _tallyMapTep)
                 _tallyMap++;
@@ -165,13 +183,26 @@ namespace AuraRevival.Business.Entity
 
         private void LevelRefresh(int level)
         {
-            if (_levelConfig.ContainsKey(level))
-            {
-                var levelConfig = _levelConfig[level];
-                Description = levelConfig.Description;
-                _tallyMapTep = levelConfig._tallyMapTep;
-            }
+            var levelConfig = _levelConfig[level];
+            _tallyMapTep++;
             _tallyMap = _tallyMapTep;
+
+            ExpMax = (int)(ExpMax * 1.5);
+
+
+            if (Name == "英雄")
+            {
+                Power += 2;
+                Agile += 2;
+                HP = HPMax;
+            }
+            else
+            {
+                Random rnd = new Random((int)DateTime.Now.ToFileTimeUtc());
+                Power += rnd.Next(0, 3);
+                Agile += rnd.Next(0, 3);
+                HP = HPMax;
+            }
         }
 
         #region 指令
@@ -298,6 +329,25 @@ namespace AuraRevival.Business.Entity
 
                 MainGame.Instance.EntityMove(this, block_New.Id, null);
             }
+        }
+
+        /// <summary>
+        /// 增加经验
+        /// </summary>
+        /// <param name="exp"></param>
+        public void SetExp(int exp)
+        {
+            Exp += exp;
+
+            //升级
+            if(Exp >= ExpMax) {
+                Exp -= ExpMax;
+                Level++;
+                LevelRefresh(Level);
+
+                Grain.Instance.MainGame.Msg(3, Name, $"升级至{Level}级！！！");
+            }
+
         }
     }
 }

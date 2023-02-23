@@ -572,7 +572,7 @@ namespace AuraRevival
         /// 展示时间
         /// </summary>
         /// <param name="time"></param>
-        private void ShowDate(DateTime time)
+        private async Task ShowDate(DateTime time)
         {
             label1.Invoke(new Action(() =>
             {

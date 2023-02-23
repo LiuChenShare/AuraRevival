@@ -66,7 +66,7 @@ namespace AuraRevival.Business.Construct
         }
 
 
-        public void SecondsEventExecute(DateTime time)
+        public async Task SecondsEventExecute(DateTime time)
         {
             if (_scriptCode != -1)
             {
@@ -99,7 +99,7 @@ namespace AuraRevival.Business.Construct
             ProductionSeconds();
         }
 
-        public void MinutesEventExecute(DateTime time)
+        public async Task MinutesEventExecute(DateTime time)
         {
 
         }

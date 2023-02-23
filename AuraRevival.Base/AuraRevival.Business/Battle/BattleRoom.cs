@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using static AuraRevival.Business.MainGame;
 
@@ -45,6 +46,9 @@ namespace AuraRevival.Business.Battle
                 BattleEntityInfo battleEntity = new BattleEntityInfo(entity, group[entity.MId]);
                 BattleEntities.Add(battleEntity);
                 RoundEvent += battleEntity.RoundEvent;
+
+                //battleEntity.BattleEvent += async (object[] ar) => { };
+
                 battleEntity.BattleEvent += BattleEventExecute;
             }
         }
@@ -60,7 +64,7 @@ namespace AuraRevival.Business.Battle
         }
 
 
-        private void RoundEventExecute(DateTime time)
+        private async Task RoundEventExecute(DateTime time)
         {
             if (State == BattleStateType.InBattle)
             {
@@ -127,7 +131,12 @@ namespace AuraRevival.Business.Battle
 
                     en.RemoveFoeIds(new List<Guid>() { defenderId });
                 }
+
+                //TODO：给经验
+                //TODO：给掉落物品
             }
+
         }
+        
     }
 }

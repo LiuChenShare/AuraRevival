@@ -35,7 +35,7 @@ namespace AuraRevival.Business
         #endregion
 
         #region 事件
-        public delegate void TimeHandler(DateTime time);//声明委托
+        public delegate Task TimeHandler(DateTime time);//声明委托
         /// <summary>秒事件 </summary>
         public event TimeHandler SecondsEvent;
         /// <summary>分事件 </summary>
@@ -79,6 +79,10 @@ namespace AuraRevival.Business
         /// 万能委托
         /// </summary>
         public delegate void AllHandler(object[] objects);
+        /// <summary>
+        /// 万能委托异步
+        /// </summary>
+        public delegate void AllTaskHandler(object[] objects);
 
         /// <summary>
         /// 单int值委托

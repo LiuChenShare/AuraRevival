@@ -22,11 +22,6 @@ namespace AuraRevival.Business.Entity
         string Description { get => Description; set => Description = value; }
 
         /// <summary>
-        /// 等级
-        /// </summary>
-        int Level { get => Level; set => Level = value; }
-
-        /// <summary>
         /// 类型
         /// </summary>
         int Type { get => Type; set => Type = value; }
@@ -45,7 +40,24 @@ namespace AuraRevival.Business.Entity
         /// 状态
         /// </summary>
         EntityStateType State { get => State; set => State = value; }
-        
+
+        #region 等级相关
+
+        /// <summary>
+        /// 等级
+        /// </summary>
+        int Level { get; }
+
+        /// <summary>
+        /// 经验值
+        /// </summary>
+        int Exp { get; }
+        /// <summary>
+        /// 经验值（上限）
+        /// </summary>
+        int ExpMax { get; }
+        #endregion
+
 
         #region 战斗相关
         /// <summary>
