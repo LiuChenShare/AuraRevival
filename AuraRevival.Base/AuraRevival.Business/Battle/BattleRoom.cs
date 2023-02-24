@@ -1,4 +1,6 @@
 ﻿using AuraRevival.Business.Entity;
+using AuraRevival.Business.Goods.Goods;
+using AuraRevival.Business.Goods;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -116,7 +118,7 @@ namespace AuraRevival.Business.Battle
 
             //声明结算
 
-            Grain.Instance.MainGame.Msg(1, $"({BlockId})", $"{attacker.Entity.Name} 攻击 {defender.Entity.Name} ，伤害{hurt}");
+            Grain.Instance.MainGame.Msg(1, $"{BlockId}", $"{attacker.Entity.Name} 攻击 {defender.Entity.Name} ，伤害{hurt}");
             var health = defender.Settlement(hurt);
             if (health == 0)
             {
@@ -132,8 +134,28 @@ namespace AuraRevival.Business.Battle
                     en.RemoveFoeIds(new List<Guid>() { defenderId });
                 }
 
-                //TODO：给经验
-                //TODO：给掉落物品
+                //给经验
+                var epxNum = defender.Entity.Power + defender.Entity.Agile;
+                attacker.Entity.SetExp(epxNum);
+                Grain.Instance.MainGame.Msg(3, $"{attacker.Entity.Name}", $"获得 {epxNum} 经验");
+
+                //给掉落物品
+                AuraRevival.Business.Construct.Construct_Base construct = Grain.Instance.GetConstructBase();
+                if (attacker.Entity.MId == construct.Id)
+                {
+                    IGoods goodWood = new Goods_Default();
+                    goodWood.Init(1, "木头", defender.Entity.Agile);
+                    IGoods goodStone = new Goods_Default();
+                    goodStone.Init(2, "石头", defender.Entity.Power);
+                    List<IGoods> goods = new List<IGoods>() { goodWood, goodStone };
+                    construct.AddGoods(goods);
+                    StringBuilder builder = new StringBuilder();
+                    foreach (var item in goods)
+                    {
+                        builder.Append($"{item.Name}*{item.Count} ");
+                    }
+                    Grain.Instance.MainGame.Msg(2, $"{construct.Name}", $"{attacker.Entity.Name} 斩获了 {builder.ToString()}");
+                }
             }
 
         }

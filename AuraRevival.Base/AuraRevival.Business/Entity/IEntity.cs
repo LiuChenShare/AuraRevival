@@ -56,6 +56,12 @@ namespace AuraRevival.Business.Entity
         /// 经验值（上限）
         /// </summary>
         int ExpMax { get; }
+
+        /// <summary>
+        /// 增加经验
+        /// </summary>
+        /// <param name="exp"></param>
+        void SetExp(int exp);
         #endregion
 
 

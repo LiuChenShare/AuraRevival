@@ -466,22 +466,26 @@ namespace AuraRevival
                     listView1.Items.RemoveAt(0);
                 }
                 ListViewItem item = new ListViewItem();
-                item.Text = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} - [{source}]：{content}";
                 switch (type)
                 {
                     case 0:
+                        item.Text = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} - *{source}*：{content}";
                         item.ForeColor = Color.Red;
                         break;
                     case 1:
+                        item.Text = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} - ({source})：{content}";
                         item.ForeColor = Color.Brown;
                         break;
                     case 2:
+                        item.Text = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} - 【{source}】：{content}";
                         item.ForeColor = Color.Blue;
                         break;
                     case 3:
+                        item.Text = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} - [{source}]：{content}";
                         item.ForeColor = Color.Black;
                         break;
                     default:
+                        item.Text = $"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} - [{source}]：{content}";
                         item.ForeColor = Color.Gray;
                         break;
                 }
