@@ -30,8 +30,9 @@ namespace AuraRevival.Business.Battle
         /// <summary>回合事件 </summary>
         public event IntHandler RoundEvent;
 
-        public BattleRoom(List<IEntity> entities)
+        public BattleRoom(Point id,List<IEntity> entities)
         {
+            BlockId = id;
             AddEntity(entities);
         }
 
@@ -106,14 +107,23 @@ namespace AuraRevival.Business.Battle
             if (attacker == null || defender == null)
                 throw new Exception("找不到参与方");
 
+            Random ran = new Random((int)DateTime.Now.ToFileTimeUtc());
             //判断是否miss
-            var a = defender.Entity.Agile - attacker.Entity.Agile;
+            var a = ((defender.Entity.Agile - attacker.Entity.Agile) / (float)attacker.Entity.Agile) * 100;
+            if (a < 1) a = 1;
+            if (a > 99) a = 99;
+            Grain.Instance.MainGame.Msg(1, $"{BlockId}", $"{attacker.Entity.Name} 攻击 {defender.Entity.Name} ，MISS几率{a}%");
+            var aa = ran.Next(0, 100);
+            if (aa <= a)
+            {
+                Grain.Instance.MainGame.Msg(1, $"{BlockId}", $"{attacker.Entity.Name} 攻击 {defender.Entity.Name} ，MISS了");
+                return;
+            }
 
             //判断伤害
             var b = attacker.Entity.Power  / 10;
             var c = (defender.Entity.Power - attacker.Entity.Power) / 20;
             var hurtMax = b - c > 0 ? b - c : 1;
-            Random ran = new Random((int)DateTime.Now.ToFileTimeUtc());
             int hurt = ran.Next(1, hurtMax);
 
             //声明结算
@@ -137,7 +147,7 @@ namespace AuraRevival.Business.Battle
                 //给经验
                 var epxNum = defender.Entity.Power + defender.Entity.Agile;
                 attacker.Entity.SetExp(epxNum);
-                Grain.Instance.MainGame.Msg(3, $"{attacker.Entity.Name}", $"获得 {epxNum} 经验");
+                Grain.Instance.MainGame.Msg(3, $"{attacker.Entity.Name}", $"获得 {epxNum} 经验，当前{attacker.Entity.Exp}/{attacker.Entity.ExpMax}");
 
                 //给掉落物品
                 AuraRevival.Business.Construct.Construct_Base construct = Grain.Instance.GetConstructBase();

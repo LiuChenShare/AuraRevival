@@ -175,7 +175,11 @@ namespace AuraRevival.Business.Entity
 
             //回血
             if (State == EntityStateType.Default && HP < HPMax)
+            {
                 HP++;
+
+                _ = Grain.Instance.MainGame.Msg(3, $"{Name}", $"回血！当前HP：{HP}");
+            }
         }
 
 
