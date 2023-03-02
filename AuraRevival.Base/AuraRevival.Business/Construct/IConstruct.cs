@@ -27,6 +27,14 @@ namespace AuraRevival.Business.Construct
         /// </summary>
         int Level { get => Level; set => Level = value; }
 
+
+        /// <summary> 行动值 </summary>
+        int _tallyMap { get => _tallyMap; set => _tallyMap = value; }
+        /// <summary> 行动值模板 </summary>
+        int _tallyMapTep { get => _tallyMapTep; set => _tallyMapTep = value; }
+        /// <summary> 当前指令 </summary>
+        int _scriptCode { get => _scriptCode; set => _scriptCode = value; }
+
         /// <summary>
         /// 仓库
         /// </summary>

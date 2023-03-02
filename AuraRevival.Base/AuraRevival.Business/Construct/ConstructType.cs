@@ -20,6 +20,11 @@ namespace AuraRevival.Business.Construct
         /// </summary>
         [Description("基地")]
         Base = 1,
+        /// <summary>
+        /// 军营
+        /// </summary>
+        [Description("军营")]
+        Camp = 2,
 
     }
 }

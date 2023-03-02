@@ -13,30 +13,14 @@ namespace AuraRevival.Business.Construct
     /// <summary>
     /// 基地(建筑)
     /// </summary>
-    public class Construct_Base : IConstruct
+    public class Construct_Base : Construct_Default
     {
-        #region 公用
-        public Guid Id {get; set;}
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public ConstructType Type { get; set; } = ConstructType.Base;
-        public int Level { get; set; } = 1;
-        public Point Location { get; set; }
-        public List<IGoods> Goods { get; private set; } = new List<IGoods>();
-        #endregion
-
         #region 自定义
 
-        /// <summary> 行动值 </summary>
-        public int _tallyMap;
-        /// <summary> 行动值模板 </summary>
-        private int _tallyMapTep;
-        /// <summary> 当前指令 </summary>
-        private int _scriptCode = -1;
         #endregion
 
         private Construct_Base() { }
-        private readonly Dictionary<int, Construct_Base> _levelConfig;
+        private new readonly Dictionary<int, Construct_Base> _levelConfig;
 
         public Construct_Base(string name, Point  location)
         {
@@ -66,7 +50,7 @@ namespace AuraRevival.Business.Construct
         }
 
 
-        public async Task SecondsEventExecute(DateTime time)
+        public override async Task SecondsEventExecute(DateTime time)
         {
             if (_scriptCode != -1)
             {
@@ -80,7 +64,7 @@ namespace AuraRevival.Business.Construct
                                 if (_tallyMap <= 0)
                                 {
                                     _tallyMap = _tallyMapTep;
-                                    Level = Level+1;
+                                    Level++;
                                     LevelRefresh(Level);
                                     _scriptCode = -1;
                                     Grain.Instance.MainGame.Msg(2,Name,$"升级为{Level}级");
@@ -99,12 +83,12 @@ namespace AuraRevival.Business.Construct
             ProductionSeconds();
         }
 
-        public async Task MinutesEventExecute(DateTime time)
+        public override async Task MinutesEventExecute(DateTime time)
         {
 
         }
 
-        public bool ScriptEvent(int scriptCode, object obj)
+        public override bool ScriptEvent(int scriptCode, object obj)
         {
             _scriptCode = scriptCode;
             switch (scriptCode)
@@ -128,7 +112,7 @@ namespace AuraRevival.Business.Construct
         /// <summary>
         /// 每秒生产业务
         /// </summary>
-        public void ProductionSeconds()
+        public override void ProductionSeconds()
         {
             IGoods goods = new Goods_Default();
             goods.Init(1, "木头", 5);
@@ -138,109 +122,6 @@ namespace AuraRevival.Business.Construct
             AddGoods(new List<IGoods>() { goods, goods2 });
         }
 
-        /// <summary>
-        /// 保存物品
-        /// </summary>
-        /// <param name="goodslist"></param>
-        /// <returns></returns>
-        public bool AddGoods(List<IGoods> goodslist)
-        {
-            foreach(var item in goodslist)
-            {
-                switch (item.Type)
-                {
-                    case GoodsType.Goods:
-                        IGoods gds = Goods.Where(x => x.Type == GoodsType.Goods && x.Code == item.Code).FirstOrDefault();
-                        //IGoods gds = null;
-                        //foreach(var jjj in Goods)
-                        //{
-                        //    if(jjj.Type == GoodsType.Goods && jjj.Code == item.Code)
-                        //    {
-                        //        gds = jjj;
-                        //        break;
-                        //    }
-                        //}
-                        if (gds != null)
-                            gds.Count += item.Count;
-                        else
-                            Goods.Add(item);
-                        break;
-                    case GoodsType.Equipment:
-                        Goods.Add(item);
-                        break;
-                }
-            }
-
-            //Grain.Instance.MainGame.Msg(2, Name, $"仓库更新了");
-            return true;
-        }
-        /// <summary>
-        /// 移除物品
-        /// </summary>
-        /// <param name="goodslist"></param>
-        /// <returns></returns>
-        public bool RemoveGoods(List<IGoods> goodslist)
-        {
-            int i = 0;
-            bool reult = true;
-            List<IGoods> goodsListRecycle = new List<IGoods>();//回收站
-
-            //尝试移除
-            for (i = 0; i < goodslist.Count; i++)
-            {
-
-                switch (goodslist[i].Type)
-                {
-                    case GoodsType.Goods:
-                        var gdsGoods = Goods.FirstOrDefault(x => x.Type == GoodsType.Goods && x.Name == goodslist[i].Name);
-                        if (gdsGoods != null && gdsGoods.Count >= goodslist[i].Count)
-                        {
-                            gdsGoods.Count -= goodslist[i].Count;
-                            goodsListRecycle.Add(goodslist[i]);
-                        }
-                        else
-                            reult = false;
-                        break;
-                    case GoodsType.Equipment:
-                        var gdsEquipment = Goods.Where(x => x.Type == GoodsType.Goods && x.Name == goodslist[i].Name).OrderBy(x => x.Durable).FirstOrDefault();
-                        if (gdsEquipment != null)
-                        {
-                            Goods.Remove(gdsEquipment);
-                            goodsListRecycle.Add(gdsEquipment);
-                        }
-                        else
-                            reult = false;
-                        break;
-                }
-                if (!reult)
-                    break;
-            }
-
-            //如果移除失败了，需要把回收站还原回去
-            if (!reult)
-            {
-                foreach (var item in goodslist)
-                {
-                    switch (item.Type)
-                    {
-                        case GoodsType.Goods:
-                            var gds = Goods.FirstOrDefault(x => x.Type == GoodsType.Goods && x.Name == item.Name);
-                            if (gds != null)
-                                gds.Count += item.Count;
-                            else
-                                Goods.Add(item);
-                            break;
-                        case GoodsType.Equipment:
-                            Goods.Add(item);
-                            break;
-                    }
-                }
-            }
-            else
-                Grain.Instance.MainGame.Msg(2, Name, $"仓库更新了");
-
-            return reult;
-        }
 
 
         private void LevelRefresh(int level)
@@ -254,29 +135,5 @@ namespace AuraRevival.Business.Construct
             _tallyMap = _tallyMapTep;
         }
 
-
-        /// <summary>
-        /// 升级
-        /// </summary>
-        /// <returns></returns>
-        private void UpLevel()
-        {
-            Thread thread = new Thread(() => {
-                var levelMax = _levelConfig.Keys.Max();
-                if (Level + 1 > levelMax)
-                    return;
-
-                while (_tallyMap > 0)
-                {
-                    Thread.Sleep(1000);
-                    _tallyMap--;
-                }
-                Level = Level++;
-                LevelRefresh(Level);
-
-                return;
-            });
-            thread.Start();
-        }
     }
 }
