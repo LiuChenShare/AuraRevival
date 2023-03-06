@@ -45,12 +45,13 @@ namespace AuraRevival
             this.button5 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.panel_Right = new System.Windows.Forms.Panel();
+            this.button2 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.panel_Bottom = new System.Windows.Forms.Panel();
             this.listView1 = new System.Windows.Forms.ListView();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.panel_Left.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.panel_Fill.SuspendLayout();
@@ -200,6 +201,7 @@ namespace AuraRevival
             // 
             // panel_Right
             // 
+            this.panel_Right.Controls.Add(this.button3);
             this.panel_Right.Controls.Add(this.button2);
             this.panel_Right.Controls.Add(this.label1);
             this.panel_Right.Controls.Add(this.button8);
@@ -213,6 +215,16 @@ namespace AuraRevival
             this.panel_Right.Name = "panel_Right";
             this.panel_Right.Size = new System.Drawing.Size(175, 418);
             this.panel_Right.TabIndex = 0;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(43, 286);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 10;
+            this.button2.Text = "生成怪物";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // label1
             // 
@@ -259,15 +271,15 @@ namespace AuraRevival
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
-            // button2
+            // button3
             // 
-            this.button2.Location = new System.Drawing.Point(43, 286);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 10;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button3.Location = new System.Drawing.Point(45, 324);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(75, 23);
+            this.button3.TabIndex = 11;
+            this.button3.Text = "保存区块";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // Form3
             // 
@@ -317,6 +329,7 @@ namespace AuraRevival
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
         private Button button2;
+        private Button button3;
     }
 }
 

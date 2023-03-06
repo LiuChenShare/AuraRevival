@@ -36,6 +36,17 @@ namespace AuraRevival.Business
         [Description("进入战斗状态")]
         Entity_BattleOut = 300000102,
 
+        /// <summary>
+        /// 实体_进入自动移动状态
+        /// </summary>
+        [Description("进入自动移动状态")]
+        Entity_AutoMove = 300000103,
+        /// <summary>
+        /// 实体_退出自动移动状态
+        /// </summary>
+        [Description("进入自动移动状态")]
+        Entity_AutoMoveOut = 300000104,
+
 
 
     }

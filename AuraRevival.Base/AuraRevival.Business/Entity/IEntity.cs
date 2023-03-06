@@ -40,6 +40,19 @@ namespace AuraRevival.Business.Entity
         /// 状态
         /// </summary>
         EntityStateType State { get => State; set => State = value; }
+        
+        /// <summary>
+        /// 特征
+        /// </summary>
+        List<EntityCharacterType> Characters { get; }
+
+        /// <summary> 地图行动值 </summary>
+        int _tallyMap { get => _tallyMap; set => _tallyMap = value; }
+        /// <summary> 行动值模板 </summary>
+        int _tallyMapTep { get => _tallyMapTep; set => _tallyMapTep = value; }
+        /// <summary> 当前指令 </summary>
+        int _scriptCode { get => _scriptCode; set => _scriptCode = value; }
+
 
         #region 等级相关
 

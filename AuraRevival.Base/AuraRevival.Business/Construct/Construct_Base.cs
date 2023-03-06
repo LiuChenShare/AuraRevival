@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,11 +19,9 @@ namespace AuraRevival.Business.Construct
     public class Construct_Base : Construct_Default
     {
         #region 自定义
-
         #endregion
 
         private Construct_Base() { }
-        private new readonly Dictionary<int, Construct_Base> _levelConfig;
 
         public Construct_Base(string name, Point  location)
         {
@@ -35,7 +36,7 @@ namespace AuraRevival.Business.Construct
             Grain.Instance.MainGame.SecondsEvent += SecondsEventExecute;
             Grain.Instance.MainGame.SecondsEvent += MinutesEventExecute;
 
-            _levelConfig = new Dictionary<int, Construct_Base>
+            _levelConfig = new Dictionary<int, Construct_Default>
             {
                 { 1, new Construct_Base() { Description = "这个是你最后的希望", _tallyMapTep = 60 } },
                 { 2, new Construct_Base() { Description = "稍微有了点起色", _tallyMapTep = 55 } },
@@ -43,6 +44,10 @@ namespace AuraRevival.Business.Construct
                 { 4, new Construct_Base() { Description = "拥有了一战之力", _tallyMapTep = 53 } }
             };
             LevelRefresh(Level);
+
+            AssemblyString = GetType().Module.Name;
+            TypeName = GetType().FullName;
+
 
             //初始化一个实体
             IEntity entity = new Entity_Default();
@@ -120,19 +125,6 @@ namespace AuraRevival.Business.Construct
             goods2.Init(2, "石头", 1);
 
             AddGoods(new List<IGoods>() { goods, goods2 });
-        }
-
-
-
-        private void LevelRefresh(int level)
-        {
-            if (_levelConfig.ContainsKey(level))
-            {
-                var levelConfig = _levelConfig[level];
-                Description = levelConfig.Description;
-                _tallyMapTep = levelConfig._tallyMapTep;
-            }
-            _tallyMap = _tallyMapTep;
         }
 
     }

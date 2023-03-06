@@ -35,6 +35,11 @@ namespace AuraRevival.Business.Construct
         /// <summary> 当前指令 </summary>
         int _scriptCode { get => _scriptCode; set => _scriptCode = value; }
 
+        /// <summary> 程序集 </summary>
+        string AssemblyString { get => AssemblyString; set => AssemblyString = value; }
+        /// <summary> 类型名称 </summary>
+        string TypeName { get => TypeName; set => TypeName = value; }
+
         /// <summary>
         /// 仓库
         /// </summary>

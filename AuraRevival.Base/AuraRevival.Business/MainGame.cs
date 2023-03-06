@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using AuraRevival.Business.Construct;
 using AuraRevival.Business.Entity;
+using AuraRevival.Core;
+using AuraRevival.DB.SQLite;
 
 namespace AuraRevival.Business
 {
@@ -93,11 +96,8 @@ namespace AuraRevival.Business
 
         /// <summary>
         /// 游戏状态
-        /// -1-GameOver
-        /// 0-初始化
-        /// 1-进行中
         /// </summary>
-        public int GameState { get; set; } = 0;
+        public GameStateType GameState { get; set; } = GameStateType.Init;
 
         public Tuple<int, int> MapSize { get; set; } = new Tuple<int, int>(1000, 1000);
 
@@ -132,18 +132,30 @@ namespace AuraRevival.Business
         }
 
         /// <summary>
-        /// 
+        /// 初始化游戏
         /// </summary>
         /// <param name="constructBaseName">基地名称</param>
         public void Init(string constructBaseName)
         {
-            if (GameState == 0)
+            if (GameState != GameStateType.Init)
             {
-                Random ran = new Random();
+                Msg(0, "Server", $"游戏当前处于{GameState.GetDescription}状态，无法初始化");
+            }
+
+            //有没有存档
+            Msg(0, "Server", "正在检测存档...");
+            var path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "AuraRevivalDB.db"));
+            if (!File.Exists(path))
+            {
+                #region 没有存档
+                //没有存档
+                Msg(0, "Server", "开始加载游戏...");
+                Random ran = new Random((int)DateTime.Now.ToFileTimeUtc());
+
+                #region 生成玩家基地
                 int x = ran.Next(MapSize.Item1);
                 int y = ran.Next(MapSize.Item2);
                 Point point = new Point(x, y);
-
 
                 Block block;
                 if (Grain.Instance.Blocks.Any(x => x.Id == point))
@@ -152,13 +164,42 @@ namespace AuraRevival.Business
                     block = NewBlock(point);
 
                 Construct_Base construct_Base = new Construct_Base(constructBaseName, point);
-
-
                 Constructs.Add(construct_Base);
                 Grain.Instance.Constructs.Add(construct_Base);
                 block.Constructs.Add(construct_Base);
+                #endregion
+
+                #region 生成敌人兵营
+                int x_Camp = x - 2;//ran.Next(MapSize.Item1);
+                int y_Camp = y - 2;//ran.Next(MapSize.Item2);
+                Point point_Camp = new Point(x_Camp, y_Camp);
+                Block block_Camp;
+                if (Grain.Instance.Blocks.Any(x => x.Id == point_Camp))
+                    block_Camp = Grain.Instance.Blocks.Where(x => x.Id == point_Camp).FirstOrDefault();
+                else
+                    block_Camp = NewBlock(point_Camp);
+                Construct_Camp construct_Camp = new Construct_Camp(null, point_Camp);
+                Constructs.Add(construct_Camp);
+                Grain.Instance.Constructs.Add(construct_Camp);
+                block_Camp.Constructs.Add(construct_Camp);
+                #endregion
+
+                Msg(0, "Server", "进入游戏");
+                return;
+                #endregion
             }
+
+            //有存档
+            //数据库升级
+            if (SQLiteDBScript.DBScript.Any())
+            {
+                DBUpdateHelper.DbVersionCheck();
+            }
+            Msg(0, "Server", "正在加载区块信息...");
+
+
         }
+
 
         public Block NewBlock(Point point)
         {
@@ -227,4 +268,34 @@ namespace AuraRevival.Business
         }
     }
 
+
+    /// <summary>
+    /// 游戏状态
+    /// </summary>
+    public enum GameStateType
+    {
+        /// <summary>
+        /// GameOver
+        /// </summary>
+        [Description("GameOver")]
+        GameOver = -1,
+
+
+
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        [Description("初始化")]
+        Init = 0,
+        /// <summary>
+        /// 加载中
+        /// </summary>
+        [Description("加载中")]
+        Load = 1,
+        /// <summary>
+        /// 游戏中
+        /// </summary>
+        [Description("游戏中")]
+        InGame = 2,
+    }
 }

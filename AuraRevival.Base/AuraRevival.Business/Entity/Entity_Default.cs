@@ -24,6 +24,14 @@ namespace AuraRevival.Business.Entity
         public int Type { get; private set; }
         public Guid MId { get; private set; }
         public EntityStateType State { get; private set; } = EntityStateType.Default;
+        public List<EntityCharacterType> Characters { get; private set; } = new List<EntityCharacterType>();
+
+        /// <summary> 地图行动值 </summary>
+        public int _tallyMap { get; private set; }
+        /// <summary> 行动值模板 </summary>
+        public int _tallyMapTep { get; private set; }
+        /// <summary> 当前指令 </summary>
+        public int _scriptCode { get; private set; } = -1;
 
 
         #region 等级相关
@@ -54,7 +62,7 @@ namespace AuraRevival.Business.Entity
         /// <summary>
         /// 生命值（最大值）
         /// </summary>
-        public int HPMax
+        public virtual int HPMax
         {
             get
             {
@@ -71,19 +79,10 @@ namespace AuraRevival.Business.Entity
 
         #region 自定义
 
-        /// <summary> 地图行动值 </summary>
-        public int _tallyMap;
-        /// <summary> 行动值模板 </summary>
-        private int _tallyMapTep;
-        /// <summary> 当前指令 </summary>
-        private int _scriptCode = -1;
-
-
-        private Dictionary<int, Entity_Default> _levelConfig;
         #endregion
 
 
-        public void Init(string name, int type, Guid mid, Point location)
+        public virtual void Init(string name, int type, Guid mid, Point location)
         {
             Id = Guid.NewGuid();
             Name = string.IsNullOrWhiteSpace(name) ? EntityHelper.GetRandomName() : name;
@@ -116,15 +115,6 @@ namespace AuraRevival.Business.Entity
             Grain.Instance.MainGame.SecondsEvent += SecondsEventExecute;
             Grain.Instance.MainGame.MinutesEvent += MinutesEventExecute;
 
-            _levelConfig = new Dictionary<int, Entity_Default>
-            {
-                { 1, new Entity_Default() { Description = "", _tallyMapTep = 5 } },
-                { 2, new Entity_Default() { Description = "", _tallyMapTep = 7  } },
-                { 3, new Entity_Default() { Description = "", _tallyMapTep = 10} },
-                { 4, new Entity_Default() { Description = "", _tallyMapTep = 12 } }
-            };
-            LevelRefresh(Level);
-
 
             Block block = Grain.Instance.Blocks.FirstOrDefault(x => x.Id == Location);
             block?.AddEntities(this);
@@ -133,7 +123,7 @@ namespace AuraRevival.Business.Entity
 
             MainGame.Instance.EntityMove(this, null, block?.Id);
         }
-        public bool ScriptEvent(int scriptCode, object obj)
+        public virtual bool ScriptEvent(int scriptCode, object obj)
         {
             _scriptCode = _scriptCode != -1 ? _scriptCode : scriptCode;
             switch (scriptCode)
@@ -156,6 +146,18 @@ namespace AuraRevival.Business.Entity
                         bool result = _script_2_02(obj);
                         return result;
                     }
+                case (int)ScriptComd.Entity_AutoMove: //自动移动
+                    {
+                        _scriptCode = -1;
+                        bool result = _script_2_03(obj);
+                        return result;
+                    }
+                case (int)ScriptComd.Entity_AutoMoveOut: //退出自动移动
+                    {
+                        _scriptCode = -1;
+                        bool result = _script_2_04(obj);
+                        return result;
+                    }
                 default:
                     break;
             }
@@ -163,11 +165,25 @@ namespace AuraRevival.Business.Entity
             return false;
         }
 
-        public async Task SecondsEventExecute(DateTime time)
+        public virtual async Task SecondsEventExecute(DateTime time)
         {
+            if (State == EntityStateType.Die)
+                return;
+
+            if (Characters.Contains(EntityCharacterType.AutoMove))
+            {
+                if (_tallyMap >= 1)
+                {
+                    string[] move = new string[] { "W", "A", "S", "D" };
+                    Random ran = new Random((int)DateTime.Now.ToFileTimeUtc());
+                    var inde = ran.Next(0, 4);
+                    _script_2_00(move[inde]);
+                }
+            }
+
         }
 
-        public async Task MinutesEventExecute(DateTime time)
+        public virtual async Task MinutesEventExecute(DateTime time)
         {
             if (_tallyMap < _tallyMapTep)
                 _tallyMap++;
@@ -183,16 +199,12 @@ namespace AuraRevival.Business.Entity
         }
 
 
-
-
-        private void LevelRefresh(int level)
+        protected virtual void LevelUp()
         {
-            var levelConfig = _levelConfig[level];
             _tallyMapTep++;
             _tallyMap = _tallyMapTep;
 
             ExpMax = (int)(ExpMax * 1.5);
-
 
             if (Name == "英雄")
             {
@@ -216,7 +228,7 @@ namespace AuraRevival.Business.Entity
         /// </summary>
         /// <param name="obj">移动指令</param>
         /// <returns></returns>
-        bool _script_2_00(object obj)
+        protected virtual bool _script_2_00(object obj)
         {
             bool result = false;
             if (_tallyMap < 1)
@@ -277,7 +289,7 @@ namespace AuraRevival.Business.Entity
         /// </summary>
         /// <param name="obj">指令内容</param>
         /// <returns></returns>
-        bool _script_2_01(object obj)
+        protected virtual bool _script_2_01(object obj)
         {
             bool result = false;
             if(State == EntityStateType.Die) 
@@ -299,7 +311,7 @@ namespace AuraRevival.Business.Entity
         /// </summary>
         /// <param name="obj">指令内容</param>
         /// <returns></returns>
-        bool _script_2_02(object obj)
+        protected virtual bool _script_2_02(object obj)
         {
             bool result = false;
             if (State == EntityStateType.Die)
@@ -317,9 +329,32 @@ namespace AuraRevival.Business.Entity
             return result;
         }
 
+        /// <summary>
+        /// 开启自动移动
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        protected virtual bool _script_2_03(object obj)
+        {
+            if (!Characters.Contains(EntityCharacterType.AutoMove))
+                Characters.Add(EntityCharacterType.AutoMove);
+            return true;
+        }
+
+        /// <summary>
+        /// 关闭自动移动
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        protected virtual bool _script_2_04(object obj)
+        {
+            if (Characters.Contains(EntityCharacterType.AutoMove))
+                Characters.RemoveAll(x => x == EntityCharacterType.AutoMove);
+            return true;
+        }
         #endregion
 
-        public void SetHP(int hp)
+        public virtual void SetHP(int hp)
         {
             HP = hp;
 
@@ -339,7 +374,7 @@ namespace AuraRevival.Business.Entity
         /// 增加经验
         /// </summary>
         /// <param name="exp"></param>
-        public void SetExp(int exp)
+        public virtual void SetExp(int exp)
         {
             Exp += exp;
 
@@ -347,7 +382,7 @@ namespace AuraRevival.Business.Entity
             if(Exp >= ExpMax) {
                 Exp -= ExpMax;
                 Level++;
-                LevelRefresh(Level);
+                LevelUp();
 
                 Grain.Instance.MainGame.Msg(3, Name, $"升级至{Level}级！！！");
             }

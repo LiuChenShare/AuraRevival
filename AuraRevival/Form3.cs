@@ -4,6 +4,7 @@ using AuraRevival.Business.Construct;
 using AuraRevival.Business.Entity;
 using System.Data;
 using System.Drawing;
+using System.Text.Json;
 
 namespace AuraRevival
 {
@@ -17,6 +18,12 @@ namespace AuraRevival
         /// 界面左上角的格子
         /// </summary>
         public Coor ZeroCoor { get; set; } = new Coor(0, 0);
+
+        /// <summary>
+        /// 是否需要刷新页面
+        /// </summary>
+        public bool FormRefreshBool { get; set; } = false;
+
 
         public Form3()
         {
@@ -58,7 +65,8 @@ namespace AuraRevival
         /// <exception cref="NotImplementedException"></exception>
         private void BlockUpdateEvent(Point blockId)
         {
-            FormRefresh();
+            //FormRefresh();
+            FormRefreshBool = true;
         }
 
         /// <summary>
@@ -69,7 +77,8 @@ namespace AuraRevival
         /// <param name="L_new"></param>
         private void EntityMoveEvent(IEntity entity, Point? L_old, Point? L_new)
         {
-            FormRefresh();
+            //FormRefresh();
+            FormRefreshBool = true;
         }
 
 
@@ -118,7 +127,7 @@ namespace AuraRevival
         /// <param name="e"></param>
         private void button1_Click_1(object sender, EventArgs e)
         {
-            int padding = Util.Padding;
+            int padding = Util.Padding *10;
             panel_Map.Location = new Point(panel_Map.Location.X + padding, panel_Map.Location.Y);
             ButtonRefresh();
         }
@@ -130,7 +139,7 @@ namespace AuraRevival
         /// <param name="e"></param>
         private void button5_Click(object sender, EventArgs e)
         {
-            int padding = Util.Padding;
+            int padding = Util.Padding * 10;
             panel_Map.Location = new Point(panel_Map.Location.X - padding, panel_Map.Location.Y);
             ButtonRefresh();
         }
@@ -142,7 +151,7 @@ namespace AuraRevival
         /// <param name="e"></param>
         private void button6_Click(object sender, EventArgs e)
         {
-            int padding = Util.Padding;
+            int padding = Util.Padding * 10;
             panel_Map.Location = new Point(panel_Map.Location.X, panel_Map.Location.Y + padding);
             ButtonRefresh();
         }
@@ -154,7 +163,7 @@ namespace AuraRevival
         /// <param name="e"></param>
         private void button7_Click(object sender, EventArgs e)
         {
-            int padding = Util.Padding;
+            int padding = Util.Padding * 10;
             panel_Map.Location = new Point(panel_Map.Location.X, panel_Map.Location.Y - padding);
             ButtonRefresh();
         }
@@ -389,7 +398,7 @@ namespace AuraRevival
                                 ToolStripMenuItem stripMenu_UpLevel = new ToolStripMenuItem();
                                 stripMenu_UpLevel.Text = "升级";
                                 stripMenu_UpLevel.Click += toolStripMenuItem_ConstructClick;
-                                stripMenu_UpLevel.Tag = new Tuple<int, object, IConstruct>(1, null, construct);
+                                stripMenu_UpLevel.Tag = new Tuple<int, object, IConstruct>((int)ScriptComd.Construct_UpLevel, null, construct);
                                 toolStripMenuItem.DropDownItems.Add(stripMenu_UpLevel);
                             }
                             stripItemsConstruct.Add(toolStripMenuItem);
@@ -582,6 +591,12 @@ namespace AuraRevival
             {
                 label1.Text = time.ToString("yyyy-MM-dd HH:mm:ss");
             }));
+
+            if (FormRefreshBool)
+            {
+                FormRefreshBool = false;
+                FormRefresh();
+            }
         }
 
         /// <summary>
@@ -646,6 +661,12 @@ namespace AuraRevival
         {
             var block = Grain.Instance.Blocks.FirstOrDefault(x => x.Id == CoorOld.CoorPoint);
             block.AddEnemy();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            var block = Grain.Instance.Blocks.FirstOrDefault(x => x.Id == CoorOld.CoorPoint);
+            var aaa = JsonSerializer.Serialize(block);
         }
     }
 }

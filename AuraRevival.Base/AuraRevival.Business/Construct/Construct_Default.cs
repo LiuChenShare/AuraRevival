@@ -24,9 +24,13 @@ namespace AuraRevival.Business.Construct
         public Point Location { get; set; }
         public List<IGoods> Goods { get; protected set; } = new List<IGoods>();
 
-        public int _tallyMap;
-        public int _tallyMapTep;
-        public int _scriptCode = -1;
+        public int _tallyMap { get; protected set; }
+        public int _tallyMapTep { get; protected set; }
+        public int _scriptCode { get; protected set; } = -1;
+
+
+        public string AssemblyString { get; protected set; }
+        public string TypeName { get; protected set; }
         #endregion
 
         #region 自定义
@@ -35,7 +39,7 @@ namespace AuraRevival.Business.Construct
 
         protected Construct_Default() { }
 
-        protected readonly Dictionary<int, Construct_Default> _levelConfig;
+        protected Dictionary<int, Construct_Default> _levelConfig;
 
         public Construct_Default(string name, Point location)
         {
@@ -59,6 +63,8 @@ namespace AuraRevival.Business.Construct
             };
             LevelRefresh(Level);
 
+            AssemblyString = GetType().Module.Name;
+            TypeName = GetType().FullName;
         }
 
 

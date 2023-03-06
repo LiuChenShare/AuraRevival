@@ -85,7 +85,7 @@ namespace AuraRevivalTest
         [DataRow(1,"ľͷ")]
         public void Goods_Init(int code,string name)
         {
-            IGoods _mtype = (IGoods)Assembly.Load("AuraRevival.Business").CreateInstance("AuraRevival.Business.Goods.Goods.Goods_Base");
+            IGoods _mtype = (IGoods)Assembly.LoadFrom("AuraRevival.Business.dll").CreateInstance("AuraRevival.Business.Goods.Goods.Goods_Default");
 
             _mtype.Init(code, name);
 
