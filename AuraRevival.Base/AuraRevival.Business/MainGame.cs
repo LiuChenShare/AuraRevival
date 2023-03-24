@@ -5,8 +5,10 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using AuraRevival.Business.Construct;
+using AuraRevival.Business.DB;
 using AuraRevival.Business.Entity;
 using AuraRevival.Core;
+using AuraRevival.DB;
 using AuraRevival.DB.SQLite;
 
 namespace AuraRevival.Business
@@ -19,7 +21,7 @@ namespace AuraRevival.Business
         #region 单例
         private static volatile MainGame instance;
         private static object syncRoot = new Object();
-        private MainGame() { }
+        public MainGame() { }
         public static MainGame Instance
         {
             get
@@ -95,19 +97,19 @@ namespace AuraRevival.Business
         #endregion
 
         /// <summary>
+        /// 游戏Id
+        /// </summary>
+        [DBFieldType(typeof(Guid))]
+        public Guid Id { get;private set; } = Guid.NewGuid();
+        /// <summary>
         /// 游戏状态
         /// </summary>
-        public GameStateType GameState { get; set; } = GameStateType.Init;
+        [DBFieldType(typeof(Int32))]
+        public GameStateType GameState { get; private set; } = GameStateType.Init;
 
-        public Tuple<int, int> MapSize { get; set; } = new Tuple<int, int>(1000, 1000);
+        [DBFieldType(typeof(Point))]
+        public Point MapSize { get; private set; } = new Point(1000, 1000);
 
-        /// <summary>
-        /// 建筑
-        /// 1.Id
-        /// 2.Name
-        /// 3.Type
-        /// </summary>
-        public List<Tuple<Guid, string, ConstructType>> Entitys = new List<Tuple<Guid, string, ConstructType>>();
         /// <summary>
         /// 建筑
         /// </summary>
@@ -144,8 +146,8 @@ namespace AuraRevival.Business
 
             //有没有存档
             Msg(0, "Server", "正在检测存档...");
-            var path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "AuraRevivalDB.db"));
-            if (!File.Exists(path))
+            var aaa = DBResponse.GetMainGame();
+            if (aaa == null)
             {
                 #region 没有存档
                 //没有存档
@@ -153,8 +155,8 @@ namespace AuraRevival.Business
                 Random ran = new Random((int)DateTime.Now.ToFileTimeUtc());
 
                 #region 生成玩家基地
-                int x = ran.Next(MapSize.Item1);
-                int y = ran.Next(MapSize.Item2);
+                int x = ran.Next(MapSize.X);
+                int y = ran.Next(MapSize.Y);
                 Point point = new Point(x, y);
 
                 Block block;
@@ -185,18 +187,22 @@ namespace AuraRevival.Business
                 #endregion
 
                 Msg(0, "Server", "进入游戏");
-                return;
                 #endregion
             }
-
-            //有存档
-            //数据库升级
-            if (SQLiteDBScript.DBScript.Any())
+            else
             {
-                DBUpdateHelper.DbVersionCheck();
-            }
-            Msg(0, "Server", "正在加载区块信息...");
+                //有存档
+                Msg(0, "Server", "正在加载游戏主信息...");
+                Id = aaa.Id;
+                GameState = aaa.GameState;
+                MapSize = aaa.MapSize;
+                GameDate = aaa.GameDate;
 
+                Msg(0, "Server", "正在加载区块信息...");
+
+                Msg(0, "Server", "进入游戏");
+            }
+            return;
 
         }
 
@@ -244,6 +250,39 @@ namespace AuraRevival.Business
             BlockUpdateEvent?.Invoke(blockId);
             return Task.CompletedTask;
         }
+
+        /// <summary>
+        /// 暂停游戏
+        /// </summary>
+        public void PauseGame()
+        {
+            GameTimer.Enabled = false;
+        }
+        /// <summary>
+        /// 继续游戏
+        /// </summary>
+        public void ProceedGame()
+        {
+            GameTimer.Enabled = true;
+        }
+        /// <summary>
+        /// 保存游戏
+        /// </summary>
+        public void SaveGame()
+        {
+            PauseGame();
+            DB.DBResponse.SaveMainGame(this);
+            ProceedGame();
+        }
+
+        /// <summary>
+        /// 停止游戏
+        /// </summary>
+        public void StopGame()
+        {
+
+        }
+
 
         private void Execute(object source, System.Timers.ElapsedEventArgs e)
         {

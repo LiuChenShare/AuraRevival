@@ -19,7 +19,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuraRevivalTest_Framework",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuraRevival.Test", "AuraRevival.Test", "{AF1839D1-325F-4758-B18D-2D8721C37409}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuraRevivalTest", "..\AuraRevival.Test\AuraRevivalTest\AuraRevivalTest.csproj", "{5B42B3BD-5158-41F6-8B3B-04F49C2073A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuraRevivalTest", "..\AuraRevival.Test\AuraRevivalTest\AuraRevivalTest.csproj", "{5B42B3BD-5158-41F6-8B3B-04F49C2073A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuraRevival.DB", "..\AuraRevival.Base\AuraRevival.DB\AuraRevival.DB.csproj", "{F7B03BAF-D9A4-4D6C-9846-C87627B88EBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{5B42B3BD-5158-41F6-8B3B-04F49C2073A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B42B3BD-5158-41F6-8B3B-04F49C2073A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B42B3BD-5158-41F6-8B3B-04F49C2073A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7B03BAF-D9A4-4D6C-9846-C87627B88EBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7B03BAF-D9A4-4D6C-9846-C87627B88EBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7B03BAF-D9A4-4D6C-9846-C87627B88EBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7B03BAF-D9A4-4D6C-9846-C87627B88EBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +67,7 @@ Global
 		{DD295DA3-3CAB-4568-8704-F0FFE6A0D80A} = {626E9482-BA42-44CE-91F3-1D72928E3A03}
 		{EE6F1005-3610-42FE-BD74-EE15D230272A} = {626E9482-BA42-44CE-91F3-1D72928E3A03}
 		{5B42B3BD-5158-41F6-8B3B-04F49C2073A7} = {AF1839D1-325F-4758-B18D-2D8721C37409}
+		{F7B03BAF-D9A4-4D6C-9846-C87627B88EBA} = {B65D245F-8749-458E-8438-819B92B41B75}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DB496309-80F1-4450-828C-BE8C8E3F2EA8}

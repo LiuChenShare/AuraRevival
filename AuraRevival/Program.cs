@@ -1,3 +1,5 @@
+using AuraRevival.DB.SQLite;
+
 namespace AuraRevival
 {
     internal static class Program
@@ -11,6 +13,14 @@ namespace AuraRevival
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
+
+
+            //Êý¾Ý¿âÉý¼¶
+            if (SQLiteDBScript.DBScript.Any())
+            {
+                DBUpdateHelper.DbVersionCheck();
+            }
+
             Application.Run(new Form1());
         }
     }

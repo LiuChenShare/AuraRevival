@@ -252,13 +252,13 @@ namespace AuraRevival.Business.Entity
                     result = true;
                     break;
                 case "D":
-                    if (Location.X + 1 > MainGame.Instance.MapSize.Item1)
+                    if (Location.X + 1 > MainGame.Instance.MapSize.X)
                         break;
                     Location = new Point(Location.X + 1, Location.Y);
                     result = true;
                     break;
                 case "S":
-                    if (Location.Y + 1 > MainGame.Instance.MapSize.Item2)
+                    if (Location.Y + 1 > MainGame.Instance.MapSize.Y)
                         break;
                     Location = new Point(Location.X, Location.Y + 1);
                     result = true;

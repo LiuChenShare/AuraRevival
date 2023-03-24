@@ -15,6 +15,7 @@ namespace AuraRevival.Business.Goods.Goods
         public GoodsType Type { get; private set; }
         public string Name { get; private set; }
         public int Count { get; set; }
+        public int Level { get;private set; }
 
 
         public void Init(int code, string name, int count = 1)

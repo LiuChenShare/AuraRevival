@@ -37,7 +37,7 @@ namespace AuraRevival
         /// <param name="e"></param>
         private void Form2_Shown(object sender, EventArgs e)
         {
-            panel_Map.Size = new Size(Grain.Instance.MainGame.MapSize.Item1 * 25 + 1, Grain.Instance.MainGame.MapSize.Item2 * 25 + 1);
+            panel_Map.Size = new Size(Grain.Instance.MainGame.MapSize.X * 25 + 1, Grain.Instance.MainGame.MapSize.Y * 25 + 1);
             button8.BackgroundImage = Image.FromFile(Util.房子_灰);
             button8.BackgroundImageLayout = ImageLayout.Zoom;
             GoHome();
@@ -261,6 +261,7 @@ namespace AuraRevival
                     {
                         ConstructType.Default => Util.房子_灰,
                         ConstructType.Base => Util.房子_蓝,
+                        ConstructType.Camp => Util.房子_红,
                         _ => Util.房子_灰,
                     };
                     g.DrawImage(Image.FromFile(imagePaht),
@@ -667,6 +668,11 @@ namespace AuraRevival
         {
             var block = Grain.Instance.Blocks.FirstOrDefault(x => x.Id == CoorOld.CoorPoint);
             var aaa = JsonSerializer.Serialize(block);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            MainGame.Instance.SaveGame();
         }
     }
 }
