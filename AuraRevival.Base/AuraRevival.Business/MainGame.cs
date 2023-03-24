@@ -110,10 +110,6 @@ namespace AuraRevival.Business
         [DBFieldType(typeof(Point))]
         public Point MapSize { get; private set; } = new Point(1000, 1000);
 
-        /// <summary>
-        /// 建筑
-        /// </summary>
-        public List<IConstruct> Constructs = new List<IConstruct>();
 
         //实例化Timer类，设置间隔时间为1秒；
         private readonly System.Timers.Timer GameTimer = new System.Timers.Timer(1000);
@@ -166,7 +162,6 @@ namespace AuraRevival.Business
                     block = NewBlock(point);
 
                 Construct_Base construct_Base = new Construct_Base(constructBaseName, point);
-                Constructs.Add(construct_Base);
                 Grain.Instance.Constructs.Add(construct_Base);
                 block.Constructs.Add(construct_Base);
                 #endregion
@@ -181,7 +176,6 @@ namespace AuraRevival.Business
                 else
                     block_Camp = NewBlock(point_Camp);
                 Construct_Camp construct_Camp = new Construct_Camp(null, point_Camp);
-                Constructs.Add(construct_Camp);
                 Grain.Instance.Constructs.Add(construct_Camp);
                 block_Camp.Constructs.Add(construct_Camp);
                 #endregion
@@ -199,7 +193,8 @@ namespace AuraRevival.Business
                 GameDate = aaa.GameDate;
 
                 Msg(0, "Server", "正在加载区块信息...");
-
+                var blocks = DBResponse.GetAllBlocks();
+                Grain.Instance.Blocks = blocks;
                 Msg(0, "Server", "进入游戏");
             }
             return;
@@ -272,6 +267,7 @@ namespace AuraRevival.Business
         {
             PauseGame();
             DB.DBResponse.SaveMainGame(this);
+            DB.DBResponse.SaveBlocks(Grain.Instance.Blocks);
             ProceedGame();
         }
 

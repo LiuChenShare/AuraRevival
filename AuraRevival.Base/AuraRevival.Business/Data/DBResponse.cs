@@ -45,7 +45,6 @@ namespace AuraRevival.Business.DB
             var dBContext = new SQLiteDBContext();
             using var conn = dBContext.GetConn();
 
-            List<Attachment> files = new List<Attachment>();
             try
             {
                 var sql_Get = "Select * FROM MainGame;";
@@ -73,7 +72,6 @@ namespace AuraRevival.Business.DB
             using var conn = dBContext.GetConn();
             var transaction = conn.BeginTransaction();
 
-            List<Attachment> files = new List<Attachment>();
             try
             {
                 var sql_Get = "Select * FROM MainGame WHERE Id=@Id;";
@@ -104,6 +102,75 @@ namespace AuraRevival.Business.DB
         }
         #endregion
 
+        #region Block
+        /// <summary>
+        /// 获取所有区块
+        /// </summary>
+        /// <returns></returns>
+        public static List<Block> GetAllBlocks()
+        {
+
+            var dBContext = new SQLiteDBContext();
+            using var conn = dBContext.GetConn();
+
+            try
+            {
+                var sql_Get = "Select * FROM Block;";
+                //var aaa = conn.QueryFirstOrDefault<MainGame>(sql_Get);
+                var result = conn.GetModelFromSql<Block>(sql_Get);
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("DBResponse", "GetAllBlocks Error", ex);
+                //LogHelper.WriteLog(GetType().FullName, "SaveMainGame Error", ex);
+                return null;
+            }
+        }
+
+
+        /// <summary>
+        /// 保存区块
+        /// </summary>
+        /// <param name="blocks"></param>
+        /// <returns></returns>
+        public static bool SaveBlocks(List<Block> blocks)
+        {
+            var dBContext = new SQLiteDBContext();
+            using var conn = dBContext.GetConn();
+
+            List<Attachment> files = new List<Attachment>();
+            try
+            {
+                foreach(var block in blocks)
+                {
+                    var sql_Get = "Select * FROM Block WHERE Id=@Id;";
+                    var sql_InsertOrUpdate = @"UPDATE Block SET GameState=@GameState, MapSize=@MapSize, GameDate=@GameDate WHERE Id=@Id;";
+                    var aaa = conn.QueryFirstOrDefault<MainGame>(sql_Get, new { Id = JsonSerializer.Serialize(block.Id) });
+                    if (aaa == null)//Update
+                        sql_InsertOrUpdate = @"INSERT INTO Block(Id) VALUES (@Id);";
+                    else
+                        continue;
+
+                    conn.Execute(sql_InsertOrUpdate,
+                        new
+                        {
+                            Id = JsonSerializer.Serialize(block.Id)
+                        });
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("DBResponse", "SaveBlocks Error", ex);
+                //LogHelper.WriteLog(GetType().FullName, "SaveMainGame Error", ex);
+                return false;
+            }
+            return true;
+        }
+        #endregion
 
         #region Construct
 

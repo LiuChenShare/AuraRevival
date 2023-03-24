@@ -14,7 +14,7 @@ namespace AuraRevival.Business.Battle
 {
     public class BattleRoom
     {
-        public Guid Id { get; private set; } = Guid.Empty;
+        public Guid Id { get; private set; } = Guid.NewGuid();
 
         /// <summary>
         /// 区块id

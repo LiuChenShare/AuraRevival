@@ -19,7 +19,12 @@
                         GameDate TIMESTAMP,
                         PRIMARY KEY (""Id"")
                     );
-                    --3.创建建筑表
+                    --3.创建区块表
+                    CREATE TABLE IF NOT EXISTS ""Block"" (
+                        ""Id"" NVARCHAR NOT NULL,
+                        PRIMARY KEY (""Id"")
+                    );
+                    --4.创建建筑表
                     CREATE TABLE IF NOT EXISTS ""Construct"" (
                         ""Id"" NVARCHAR NOT NULL,
                         ""Name"" NVARCHAR,
