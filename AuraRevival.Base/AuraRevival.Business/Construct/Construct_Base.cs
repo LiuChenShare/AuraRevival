@@ -21,7 +21,7 @@ namespace AuraRevival.Business.Construct
         #region 自定义
         #endregion
 
-        private Construct_Base() { }
+        public Construct_Base() { }
 
         public Construct_Base(string name, Point  location)
         {

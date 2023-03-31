@@ -21,6 +21,7 @@ namespace AuraRevival.Business
         //public (int,int) Id { get; set; }
         public Point Id { get; set; }
 
+        public Block() { }
 
         public Block(Point id)
         {
@@ -68,7 +69,9 @@ namespace AuraRevival.Business
             }
         }
 
-
+        /// <summary>
+        /// 新增敌人
+        /// </summary>
         public void AddEnemy()
         {
 

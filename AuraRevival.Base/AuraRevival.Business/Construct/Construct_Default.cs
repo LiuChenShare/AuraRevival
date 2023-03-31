@@ -5,8 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace AuraRevival.Business.Construct
 {
@@ -37,7 +39,7 @@ namespace AuraRevival.Business.Construct
 
         #endregion
 
-        protected Construct_Default() { }
+        public Construct_Default() { }
 
         protected Dictionary<int, Construct_Default> _levelConfig;
 
@@ -67,6 +69,37 @@ namespace AuraRevival.Business.Construct
             TypeName = GetType().FullName;
         }
 
+        public void Resume(IConstruct construct)
+        {
+            Id = construct.Id;
+            Type = construct.Type;
+            Name = construct.Name;
+            Level = construct.Level;
+            Location = construct.Location;
+            Description = construct.Description;
+            _tallyMapTep = construct._tallyMapTep;
+            _tallyMap= construct._tallyMap;
+            _scriptCode = construct._scriptCode;
+            AssemblyString = construct.AssemblyString;
+            TypeName = construct.TypeName;
+
+
+            //注册秒事件
+            Grain.Instance.MainGame.SecondsEvent += SecondsEventExecute;
+            Grain.Instance.MainGame.SecondsEvent += MinutesEventExecute;
+
+
+            _levelConfig = new Dictionary<int, Construct_Default>
+            {
+                { 1, new Construct_Default() { Description = "这个是你最后的希望", _tallyMapTep = 60 } },
+                { 2, new Construct_Default() { Description = "稍微有了点起色", _tallyMapTep = 55 } },
+                { 3, new Construct_Default() { Description = "还不错呦", _tallyMapTep = 54 } },
+                { 4, new Construct_Default() { Description = "拥有了一战之力", _tallyMapTep = 53 } }
+            };
+
+            var aaaa = GetType().Module.Name;
+            var bbbb = GetType().FullName;
+        }
 
         public virtual async Task SecondsEventExecute(DateTime time)
         {
@@ -244,6 +277,7 @@ namespace AuraRevival.Business.Construct
 
             return reult;
         }
+
 
 
         protected virtual void LevelRefresh(int level)

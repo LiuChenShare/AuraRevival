@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Text.Json;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using AuraRevival.Business.Construct;
 using AuraRevival.Business.DB;
 using AuraRevival.Business.Entity;
+using AuraRevival.Business.Goods;
 using AuraRevival.Core;
 using AuraRevival.DB;
 using AuraRevival.DB.SQLite;
@@ -195,6 +201,23 @@ namespace AuraRevival.Business
                 Msg(0, "Server", "正在加载区块信息...");
                 var blocks = DBResponse.GetAllBlocks();
                 Grain.Instance.Blocks = blocks;
+
+                Msg(0, "Server", "正在加载建筑信息...");
+                var constructs = DBResponse.GetAllConstructs();
+                for (int i = 0; i < constructs.Count; i++)
+                {
+                    Msg(0, "Server", $"正在加载区块信息({i + 1}/{constructs.Count})");
+                    IConstruct _mtype = (IConstruct)Assembly.LoadFrom(constructs[i].AssemblyString).CreateInstance(constructs[i].TypeName);
+                    _mtype.Resume(constructs[i]);
+                    Grain.Instance.Constructs.Add(_mtype);
+
+                    Block block;
+                    if (Grain.Instance.Blocks.Any(x => x.Id == _mtype.Location))
+                        block = Grain.Instance.Blocks.Where(x => x.Id == _mtype.Location).FirstOrDefault();
+                    else
+                        block = NewBlock(_mtype.Location);
+                    block.Constructs.Add(_mtype);
+                }
                 Msg(0, "Server", "进入游戏");
             }
             return;
@@ -268,6 +291,7 @@ namespace AuraRevival.Business
             PauseGame();
             DB.DBResponse.SaveMainGame(this);
             DB.DBResponse.SaveBlocks(Grain.Instance.Blocks);
+            DB.DBResponse.SaveConstructs(Grain.Instance.Constructs);
             ProceedGame();
         }
 

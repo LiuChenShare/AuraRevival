@@ -79,6 +79,12 @@ namespace AuraRevival.Business.Construct
         /// <returns></returns>
         bool RemoveGoods(List<IGoods> goodslist) => false;
         //public void Xxx() => throw new NotImplementedException();
+        
+        /// <summary>
+        /// 恢复（重新启动）
+        /// </summary>
+        /// <param name="construct"></param>
+        void Resume(IConstruct construct);
     }
 }
 

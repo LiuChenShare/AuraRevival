@@ -22,7 +22,7 @@ namespace AuraRevival.Business.Construct
 
         #endregion
 
-        private Construct_Camp() { }
+        public Construct_Camp() { }
 
         public Construct_Camp(string name, Point  location)
         {

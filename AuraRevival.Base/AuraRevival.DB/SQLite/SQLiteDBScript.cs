@@ -6,15 +6,15 @@
 
         public static Dictionary<int, string> DBScript { get; set; } = new Dictionary<int, string>()
         {
-                {0,@"--1.创建数据库基础表
+                {1,@"--1.创建数据库基础表
                     CREATE TABLE IF NOT EXISTS DBVersion (
-                        Version INTEGER NOT NULL,
+                        Version integer NOT NULL,
                         CreateTime NVARCHAR NOT NULL
                     );
                     --2.创建游戏主表
                     CREATE TABLE IF NOT EXISTS MainGame (
                         Id NVARCHAR NOT NULL,
-                        GameState INTEGER,
+                        GameState integer,
                         MapSize NVARCHAR,
                         GameDate TIMESTAMP,
                         PRIMARY KEY (""Id"")
@@ -29,12 +29,14 @@
                         ""Id"" NVARCHAR NOT NULL,
                         ""Name"" NVARCHAR,
                         ""Description"" NVARCHAR,
-                        ""Type"" INTEGER,
-                        ""Level"" INTEGER,
+                        ""Type"" integer,
+                        ""Level"" integer,
                         ""Location"" NVARCHAR,
-                        ""_tallyMap"" INTEGER,
-                        ""_tallyMapTep"" INTEGER,
-                        ""_scriptCode"" INTEGER,
+                        ""_tallyMap"" integer,
+                        ""_tallyMapTep"" integer,
+                        ""_scriptCode"" integer,
+                        ""AssemblyString"" NVARCHAR,
+                        ""TypeName"" NVARCHAR,
                         PRIMARY KEY (""Id"")
                     );
                     

@@ -135,6 +135,8 @@ namespace AuraRevival.DB.SQLite
                                     //    pro.SetValue(obj, int.Parse(dr[column.ColumnName].ToString()), null);
                                     //    break;
                                     case "Int32":
+                                        pro.SetValue(obj, int.Parse(dr[column.ColumnName].ToString()), null);
+                                        break;
                                     case "String":
                                     case "DateTime":
                                         pro.SetValue(obj, dr[column.ColumnName], null);

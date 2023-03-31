@@ -1,4 +1,5 @@
-﻿using AuraRevival.Core;
+﻿using AuraRevival.Business.Construct;
+using AuraRevival.Core;
 using AuraRevival.DB.SQLite;
 using Dapper;
 using System.Net.Mail;
@@ -6,6 +7,7 @@ using System.Reflection.Emit;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Xml.Linq;
 
 namespace AuraRevival.Business.DB
 {
@@ -74,9 +76,10 @@ namespace AuraRevival.Business.DB
 
             try
             {
+                //var sql_Get = $"Select * FROM MainGame WHERE Id='{mainGame.Id}';";
                 var sql_Get = "Select * FROM MainGame WHERE Id=@Id;";
                 var sql_InsertOrUpdate = @"UPDATE MainGame SET GameState=@GameState, MapSize=@MapSize, GameDate=@GameDate WHERE Id=@Id;";
-                var aaa = conn.QueryFirstOrDefault<MainGame>(sql_Get, new { mainGame.Id });
+                var aaa = conn.GetModelFromSql<MainGame>(sql_Get, new { Id=mainGame.Id });
                 if (aaa == null)//Update
                     sql_InsertOrUpdate = @"INSERT INTO MainGame(ID,GameState,MapSize,GameDate) VALUES (@Id, @GameState, @MapSize, @GameDate);";
 
@@ -140,7 +143,6 @@ namespace AuraRevival.Business.DB
             var dBContext = new SQLiteDBContext();
             using var conn = dBContext.GetConn();
 
-            List<Attachment> files = new List<Attachment>();
             try
             {
                 foreach(var block in blocks)
@@ -173,7 +175,84 @@ namespace AuraRevival.Business.DB
         #endregion
 
         #region Construct
+        /// <summary>
+        /// 获取所有建筑
+        /// </summary>
+        /// <returns></returns>
+        public static List<Construct_Default> GetAllConstructs()
+        {
 
+            var dBContext = new SQLiteDBContext();
+            using var conn = dBContext.GetConn();
+
+            try
+            {
+                var sql_Get = "Select * FROM Construct;";
+                //var aaa = conn.QueryFirstOrDefault<MainGame>(sql_Get);
+                var result = conn.GetModelFromSql<Construct_Default>(sql_Get);
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("DBResponse", "GetAllConstructs Error", ex);
+                //LogHelper.WriteLog(GetType().FullName, "SaveMainGame Error", ex);
+                return null;
+            }
+        }
+
+
+        /// <summary>
+        /// 保存建筑
+        /// </summary>
+        /// <param name="constructs"></param>
+        /// <returns></returns>
+        public static bool SaveConstructs(List<IConstruct> constructs)
+        {
+            var dBContext = new SQLiteDBContext();
+            using var conn = dBContext.GetConn();
+
+            try
+            {
+                foreach (var construct in constructs)
+                {
+                    var sql_Get = "Select * FROM Construct WHERE Id=@Id;";
+                    var sql_InsertOrUpdate = @"UPDATE Construct SET Name=@Name, Description=@Description, Type=@Type, Level=@Level, Location=@Location, _tallyMap=@_tallyMap, _tallyMapTep=@_tallyMapTep,
+                                                                    _scriptCode=@_scriptCode, AssemblyString=@AssemblyString, TypeName=@TypeName WHERE Id=@Id;";
+                    var aaa = conn.QueryFirstOrDefault<IConstruct>(sql_Get, new { construct.Id });
+                    if (aaa == null)//Update
+                        sql_InsertOrUpdate = @"INSERT INTO Construct(Id, Name, Description, Type, Level, Location, _tallyMap, _tallyMapTep, _scriptCode, AssemblyString, TypeName)
+                                                            VALUES (@Id, @Name, @Description, @Type, @Level, @Location, @_tallyMap, @_tallyMapTep, @_scriptCode, @AssemblyString, @TypeName);";
+                    else
+                        continue;
+
+                    conn.Execute(sql_InsertOrUpdate,
+                        new
+                        {
+                            Id = construct.Id.ToString(),
+                            Name = construct.Name,
+                            Description = construct.Description,
+                            Type = construct.Type,
+                            Level = construct.Level,
+                            Location = JsonSerializer.Serialize(construct.Location),
+                            _tallyMap = construct._tallyMap,
+                            _tallyMapTep = construct._tallyMapTep,
+                            _scriptCode = construct._scriptCode,
+                            construct.AssemblyString,
+                            construct.TypeName,
+                        });
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog("DBResponse", "SaveConstructs Error", ex);
+                //LogHelper.WriteLog(GetType().FullName, "SaveMainGame Error", ex);
+                return false;
+            }
+            return true;
+        }
         #endregion
     }
 }
