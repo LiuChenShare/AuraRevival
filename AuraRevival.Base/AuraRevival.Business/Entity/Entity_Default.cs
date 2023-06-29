@@ -17,32 +17,32 @@ namespace AuraRevival.Business.Entity
     public class Entity_Default : IEntity
     {
         #region 公用
-        public Guid Id { get; private set; }
-        public string Name { get; private set; }
-        public Point Location { get; private set; }
-        public string Description { get; private set; }
-        public int Type { get; private set; }
-        public Guid MId { get; private set; }
-        public EntityStateType State { get; private set; } = EntityStateType.Default;
-        public List<EntityCharacterType> Characters { get; private set; } = new List<EntityCharacterType>();
+        public Guid Id { get; protected set; }
+        public string Name { get; protected set; }
+        public Point Location { get; protected set; }
+        public string Description { get; protected set; }
+        public int Type { get; protected set; }
+        public Guid MId { get; protected set; }
+        public EntityStateType State { get; protected set; } = EntityStateType.Default;
+        public List<EntityCharacterType> Characters { get; protected set; } = new List<EntityCharacterType>();
 
         /// <summary> 地图行动值 </summary>
-        public int _tallyMap { get; private set; }
+        public int _tallyMap { get; protected set; }
         /// <summary> 行动值模板 </summary>
-        public int _tallyMapTep { get; private set; }
+        public int _tallyMapTep { get; protected set; }
         /// <summary> 当前指令 </summary>
-        public int _scriptCode { get; private set; } = -1;
+        public int _scriptCode { get; protected set; } = -1;
 
 
         #region 等级相关
 
-        public int Level { get; private set; }
+        public int Level { get; protected set; }
 
-        public int Exp { get; private set; }
+        public int Exp { get; protected set; }
         /// <summary>
         /// 经验值（上限）
         /// </summary>
-        public int ExpMax { get; private set; }
+        public int ExpMax { get; protected set; }
         #endregion
 
 
@@ -50,15 +50,15 @@ namespace AuraRevival.Business.Entity
         /// <summary>
         /// 力量
         /// </summary>
-        public int Power { get; private set; }
+        public int Power { get; protected set; }
         /// <summary>
         /// 敏捷
         /// </summary>
-        public int Agile { get; private set; }
+        public int Agile { get; protected set; }
         /// <summary>
         /// 生命值
         /// </summary>
-        public int HP { get; private set; }
+        public int HP { get; protected set; }
         /// <summary>
         /// 生命值（最大值）
         /// </summary>
@@ -69,9 +69,13 @@ namespace AuraRevival.Business.Entity
                 var a = 1.55;
                 return (int)(Power * a);
             }
-            private set { HPMax = value; }
+            protected set { HPMax = value; }
         }
         #endregion
+
+
+        public string AssemblyString { get; protected set; }
+        public string TypeName { get; protected set; }
         #endregion
 
 
@@ -84,6 +88,9 @@ namespace AuraRevival.Business.Entity
 
         public virtual void Init(string name, int type, Guid mid, Point location)
         {
+            AssemblyString = GetType().Module.Name;
+            TypeName = GetType().FullName;
+
             Id = Guid.NewGuid();
             Name = string.IsNullOrWhiteSpace(name) ? EntityHelper.GetRandomName() : name;
             Type = type;
@@ -95,20 +102,12 @@ namespace AuraRevival.Business.Entity
             _tallyMapTep = 5;
             _tallyMap = 0;
 
-            if (name == "英雄")
-            {
-                Power = 10;
-                Agile = 10;
-                HP = HPMax;
-            }
-            else
-            {
+           
                 Random rnd = new Random((int)DateTime.Now.ToFileTimeUtc());
                 Power = rnd.Next(1, 11);
                 Agile = rnd.Next(1, 11);
                 HP = HPMax;
-            }
-
+            
 
 
             //注册秒事件
@@ -206,19 +205,11 @@ namespace AuraRevival.Business.Entity
 
             ExpMax = (int)(ExpMax * 1.5);
 
-            if (Name == "英雄")
-            {
-                Power += 2;
-                Agile += 2;
-                HP = HPMax;
-            }
-            else
-            {
-                Random rnd = new Random((int)DateTime.Now.ToFileTimeUtc());
-                Power += rnd.Next(0, 3);
-                Agile += rnd.Next(0, 3);
-                HP = HPMax;
-            }
+            Random rnd = new Random((int)DateTime.Now.ToFileTimeUtc());
+            Power += rnd.Next(0, 3);
+            Agile += rnd.Next(0, 3);
+            HP = HPMax;
+
         }
 
         #region 指令

@@ -50,7 +50,7 @@ namespace AuraRevival.Business.Construct
 
 
             //初始化一个实体
-            IEntity entity = new Entity_Default();
+            IEntity entity = new Entity_Leader();
             entity.Init("英雄",0, Id, Location);
         }
 

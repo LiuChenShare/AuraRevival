@@ -99,6 +99,11 @@ namespace AuraRevival.Business.Entity
         #endregion
 
 
+        /// <summary> 程序集 </summary>
+        string AssemblyString { get => AssemblyString; set => AssemblyString = value; }
+        /// <summary> 类型名称 </summary>
+        string TypeName { get => TypeName; set => TypeName = value; }
+
         /// <summary>
         /// 初始化
         /// </summary>

@@ -275,13 +275,13 @@ namespace AuraRevival
                 #region 绘制实体
                 if (block.Entities.Any())
                 {
-                    IEntity entity = block.Entities.OrderBy(x => x.Type).FirstOrDefault();
+                    IEntity entity = block.Entities.LastOrDefault();
 
                     string imagePath = entity.Type switch
                     {
-                        0 => Util.士兵,
+                        0 => Util.士兵,//主角
                         2 => Util.小怪,
-                        _ => Util.士兵,
+                        _ => Util.古剑,
                     };
                     g.DrawImage(Image.FromFile(imagePath),
                         constructCoor.Rectangle.X,
