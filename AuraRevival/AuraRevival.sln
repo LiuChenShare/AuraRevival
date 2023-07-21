@@ -21,7 +21,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuraRevival.Test", "AuraRev
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuraRevivalTest", "..\AuraRevival.Test\AuraRevivalTest\AuraRevivalTest.csproj", "{5B42B3BD-5158-41F6-8B3B-04F49C2073A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuraRevival.DB", "..\AuraRevival.Base\AuraRevival.DB\AuraRevival.DB.csproj", "{F7B03BAF-D9A4-4D6C-9846-C87627B88EBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuraRevival.DB", "..\AuraRevival.Base\AuraRevival.DB\AuraRevival.DB.csproj", "{F7B03BAF-D9A4-4D6C-9846-C87627B88EBA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wiki", "Wiki", "{0F5A065C-8DD0-47CB-A44E-8A1D1303201E}"
+	ProjectSection(SolutionItems) = preProject
+		..\Wiki\Home.md = ..\Wiki\Home.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
