@@ -26,6 +26,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wiki", "Wiki", "{0F5A065C-8DD0-47CB-A44E-8A1D1303201E}"
 	ProjectSection(SolutionItems) = preProject
 		..\Wiki\Home.md = ..\Wiki\Home.md
+		..\Wiki\Task Plan.md = ..\Wiki\Task Plan.md
 	EndProjectSection
 EndProject
 Global
