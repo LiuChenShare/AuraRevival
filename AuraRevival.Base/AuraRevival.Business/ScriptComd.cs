@@ -18,7 +18,7 @@ namespace AuraRevival.Business
         [Description("升级")]
         Construct_UpLevel = 200000100,
 
-
+        #region 实体
         /// <summary>
         /// 实体_移动
         /// </summary>
@@ -46,8 +46,18 @@ namespace AuraRevival.Business
         /// </summary>
         [Description("进入自动移动状态")]
         Entity_AutoMoveOut = 300000104,
+        /// <summary>
+        /// 实体_停止移动状态
+        /// </summary>
+        [Description("停止移动状态")]
+        Entity_MoveFeature_Stop = 300000105,
+        /// <summary>
+        /// 实体_进入默认移动状态
+        /// </summary>
+        [Description("进入默认移动状态")]
+        Entity_MoveFeature_Default = 300000106,
 
-
+        #endregion
 
     }
 }

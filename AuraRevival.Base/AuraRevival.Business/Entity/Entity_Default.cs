@@ -26,11 +26,7 @@ namespace AuraRevival.Business.Entity
         public EntityStateType State { get; protected set; } = EntityStateType.Default;
         public List<EntityCharacterType> Characters { get; protected set; } = new List<EntityCharacterType>();
 
-        /// <summary> 地图行动值 </summary>
-        public int _tallyMap { get; protected set; }
-        /// <summary> 行动值模板 </summary>
-        public int _tallyMapTep { get; protected set; }
-        /// <summary> 当前指令 </summary>
+        /// <summary> 当前指令 （ScriptComd）</summary>
         public int _scriptCode { get; protected set; } = -1;
 
 
@@ -73,6 +69,18 @@ namespace AuraRevival.Business.Entity
         }
         #endregion
 
+        #region 地图移动相关
+
+        /// <summary> 地图行动值 </summary>
+        public int _tallyMap { get; protected set; }
+        /// <summary> 行动值模板 </summary>
+        public int _tallyMapTep { get; protected set; }
+        /// <summary> 移动特征 </summary>
+        public MoveFeature MoveFeature { get; protected set; } = MoveFeature.Default;
+        /// <summary> 目的地地区块id </summary>
+        public Point? DestLocation { get; protected set; } = null;
+        #endregion
+
 
         public string AssemblyString { get; protected set; }
         public string TypeName { get; protected set; }
@@ -101,8 +109,8 @@ namespace AuraRevival.Business.Entity
             Exp = 0;
             _tallyMapTep = 5;
             _tallyMap = 0;
+            MoveFeature = MoveFeature.Default;
 
-           
                 Random rnd = new Random((int)DateTime.Now.ToFileTimeUtc());
                 Power = rnd.Next(1, 11);
                 Agile = rnd.Next(1, 11);
@@ -124,59 +132,100 @@ namespace AuraRevival.Business.Entity
         }
         public virtual bool ScriptEvent(int scriptCode, object obj)
         {
-            _scriptCode = _scriptCode != -1 ? _scriptCode : scriptCode;
+            //if (_scriptCode != -1) return false;
+            //_scriptCode = _scriptCode != -1 ? _scriptCode : scriptCode;
             switch (scriptCode)
             {
                 case (int)ScriptComd.Entity_Move: //移动
                     {
-                        _scriptCode = -1;
+                        //_scriptCode = -1;
                         bool result = _script_2_00(obj);
                         return result;
                     }
                 case (int)ScriptComd.Entity_Battle: //进入战斗
                     {
-                        _scriptCode = -1;
+                        //_scriptCode = -1;
                         bool result = _script_2_01(obj);
                         return result;
                     }
                 case (int)ScriptComd.Entity_BattleOut: //退出战斗
                     {
-                        _scriptCode = -1;
+                        //_scriptCode = -1;
                         bool result = _script_2_02(obj);
                         return result;
                     }
                 case (int)ScriptComd.Entity_AutoMove: //自动移动
                     {
-                        _scriptCode = -1;
+                        //_scriptCode = -1;
                         bool result = _script_2_03(obj);
                         return result;
                     }
                 case (int)ScriptComd.Entity_AutoMoveOut: //退出自动移动
                     {
-                        _scriptCode = -1;
+                        //_scriptCode = -1;
                         bool result = _script_2_04(obj);
                         return result;
                     }
+                case (int)ScriptComd.Entity_MoveFeature_Stop: //停止移动状态
+                    return _script_3_105(obj);
+                case (int)ScriptComd.Entity_MoveFeature_Default: //进入默认移动状态
+                    return _script_3_106(obj);
+                    
                 default:
-                    break;
+                    return _script_default(obj);//默认指令，其他类型可以重写它
             }
-            _scriptCode = -1;
-            return false;
+            //_scriptCode = -1;
+            //return false;
         }
 
         public virtual async Task SecondsEventExecute(DateTime time)
         {
             if (State == EntityStateType.Die)
-                return;
-
-            if (Characters.Contains(EntityCharacterType.AutoMove))
             {
-                if (_tallyMap >= 1)
+                Grain.Instance.MainGame.SecondsEvent -= SecondsEventExecute;
+                return;
+            }
+
+            //允许移动
+            if (MoveFeature != MoveFeature.Stop && State == EntityStateType.Default)
+            {
+                if (MoveFeature == MoveFeature.Default)
                 {
-                    string[] move = new string[] { "W", "A", "S", "D" };
-                    Random ran = new Random((int)DateTime.Now.ToFileTimeUtc());
-                    var inde = ran.Next(0, 4);
-                    _script_2_00(move[inde]);
+                    if (_tallyMap >= 1)
+                    {
+                        //向目的地移动
+                        if (DestLocation != null)
+                        {
+                            if (DestLocation == Location)
+                                DestLocation = null;
+                            else
+                            {
+                                Point destLocation = DestLocation.Value;
+                                var w = Location.Y - destLocation.Y;
+                                var a = Location.X - destLocation.X;
+                                var s = destLocation.Y - Location.Y;
+                                var d = destLocation.X - Location.X;
+                                var max = (new int[] { w, a, s, d }).Max();
+
+                                if (w == max) _script_2_00("W");
+                                else if (a == max) _script_2_00("A");
+                                else if (s == max) _script_2_00("S");
+                                else if (d == max) _script_2_00("D");
+
+                                if (DestLocation == Location)
+                                    DestLocation = null;
+                            }
+                        }
+                        //随机移动
+                        else if (Characters.Contains(EntityCharacterType.AutoMove))
+                        {
+                            string[] move = new string[] { "W", "A", "S", "D" };
+                            Random ran = new Random((int)DateTime.Now.ToFileTimeUtc());
+                            var inde = ran.Next(0, 4);
+                            _script_2_00(move[inde]);
+
+                        }
+                    }
                 }
             }
 
@@ -184,6 +233,13 @@ namespace AuraRevival.Business.Entity
 
         public virtual async Task MinutesEventExecute(DateTime time)
         {
+            if (State == EntityStateType.Die)
+            {
+                Grain.Instance.MainGame.MinutesEvent -= MinutesEventExecute;
+                return;
+            }
+
+
             if (_tallyMap < _tallyMapTep)
                 _tallyMap++;
 
@@ -213,6 +269,16 @@ namespace AuraRevival.Business.Entity
         }
 
         #region 指令
+
+        /// <summary>
+        /// 默认指令
+        /// </summary>
+        /// <param name="obj">指令内容</param>
+        /// <returns></returns>
+        protected virtual bool _script_default(object obj)
+        {
+            return false;
+        }
 
         /// <summary>
         /// 移动
@@ -341,6 +407,26 @@ namespace AuraRevival.Business.Entity
         {
             if (Characters.Contains(EntityCharacterType.AutoMove))
                 Characters.RemoveAll(x => x == EntityCharacterType.AutoMove);
+            return true;
+        }
+        /// <summary>
+        /// 停止移动状态
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        protected virtual bool _script_3_105(object obj)
+        {
+            MoveFeature = MoveFeature.Stop;
+            return true;
+        }
+        /// <summary>
+        /// 进入默认移动状态
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        protected virtual bool _script_3_106(object obj)
+        {
+            MoveFeature = MoveFeature.Default;
             return true;
         }
         #endregion

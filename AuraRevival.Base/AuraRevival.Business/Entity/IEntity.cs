@@ -46,10 +46,6 @@ namespace AuraRevival.Business.Entity
         /// </summary>
         List<EntityCharacterType> Characters { get; }
 
-        /// <summary> 地图行动值 </summary>
-        int _tallyMap { get => _tallyMap; set => _tallyMap = value; }
-        /// <summary> 行动值模板 </summary>
-        int _tallyMapTep { get => _tallyMapTep; set => _tallyMapTep = value; }
         /// <summary> 当前指令 </summary>
         int _scriptCode { get => _scriptCode; set => _scriptCode = value; }
 
@@ -96,6 +92,19 @@ namespace AuraRevival.Business.Entity
         /// 生命值（最大值）
         /// </summary>
         int HPMax { get => HPMax; set => HPMax = value; }
+        #endregion
+
+
+        #region 地图移动相关
+
+        /// <summary> 地图行动值 </summary>
+        int _tallyMap { get => _tallyMap; set => _tallyMap = value; }
+        /// <summary> 行动值模板 </summary>
+        int _tallyMapTep { get => _tallyMapTep; set => _tallyMapTep = value; }
+        /// <summary> 移动特征 </summary>
+        MoveFeature MoveFeature { get => MoveFeature; set => MoveFeature = value; }
+        /// <summary> 目的地地区块id </summary>
+        Point? DestLocation { get => DestLocation; set => DestLocation = value; }
         #endregion
 
 
