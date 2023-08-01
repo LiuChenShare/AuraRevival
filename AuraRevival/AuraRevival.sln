@@ -9,8 +9,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuraRevival.Base", "AuraRev
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuraRevival.Business", "..\AuraRevival.Base\AuraRevival.Business\AuraRevival.Business.csproj", "{F1061B7A-405A-4F82-B0F1-1869A2868A30}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuraRevival.Core", "..\AuraRevival.Base\AuraRevival.Core\AuraRevival.Core.csproj", "{00EEFA5D-D7D4-47AB-A7CB-EDE04640535B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuraRevival_Framework", "..\AuraRevival_Framework\AuraRevival\AuraRevival_Framework.csproj", "{DD295DA3-3CAB-4568-8704-F0FFE6A0D80A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuraRevival.Framework", "AuraRevival.Framework", "{626E9482-BA42-44CE-91F3-1D72928E3A03}"
@@ -29,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wiki", "Wiki", "{0F5A065C-8
 		..\Wiki\Task Plan.md = ..\Wiki\Task Plan.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuraRevival.Core", "..\AuraRevival.Base\AuraRevival.Core\AuraRevival.Core.csproj", "{62983612-E3E4-4F06-94DE-B35FB3EB55E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,10 +43,6 @@ Global
 		{F1061B7A-405A-4F82-B0F1-1869A2868A30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1061B7A-405A-4F82-B0F1-1869A2868A30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1061B7A-405A-4F82-B0F1-1869A2868A30}.Release|Any CPU.Build.0 = Release|Any CPU
-		{00EEFA5D-D7D4-47AB-A7CB-EDE04640535B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{00EEFA5D-D7D4-47AB-A7CB-EDE04640535B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{00EEFA5D-D7D4-47AB-A7CB-EDE04640535B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{00EEFA5D-D7D4-47AB-A7CB-EDE04640535B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DD295DA3-3CAB-4568-8704-F0FFE6A0D80A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DD295DA3-3CAB-4568-8704-F0FFE6A0D80A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD295DA3-3CAB-4568-8704-F0FFE6A0D80A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -63,17 +59,21 @@ Global
 		{F7B03BAF-D9A4-4D6C-9846-C87627B88EBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7B03BAF-D9A4-4D6C-9846-C87627B88EBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7B03BAF-D9A4-4D6C-9846-C87627B88EBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62983612-E3E4-4F06-94DE-B35FB3EB55E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62983612-E3E4-4F06-94DE-B35FB3EB55E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62983612-E3E4-4F06-94DE-B35FB3EB55E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62983612-E3E4-4F06-94DE-B35FB3EB55E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F1061B7A-405A-4F82-B0F1-1869A2868A30} = {B65D245F-8749-458E-8438-819B92B41B75}
-		{00EEFA5D-D7D4-47AB-A7CB-EDE04640535B} = {B65D245F-8749-458E-8438-819B92B41B75}
 		{DD295DA3-3CAB-4568-8704-F0FFE6A0D80A} = {626E9482-BA42-44CE-91F3-1D72928E3A03}
 		{EE6F1005-3610-42FE-BD74-EE15D230272A} = {626E9482-BA42-44CE-91F3-1D72928E3A03}
 		{5B42B3BD-5158-41F6-8B3B-04F49C2073A7} = {AF1839D1-325F-4758-B18D-2D8721C37409}
 		{F7B03BAF-D9A4-4D6C-9846-C87627B88EBA} = {B65D245F-8749-458E-8438-819B92B41B75}
+		{62983612-E3E4-4F06-94DE-B35FB3EB55E4} = {B65D245F-8749-458E-8438-819B92B41B75}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DB496309-80F1-4450-828C-BE8C8E3F2EA8}

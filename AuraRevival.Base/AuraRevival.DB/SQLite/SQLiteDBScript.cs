@@ -39,6 +39,40 @@
                         ""TypeName"" NVARCHAR,
                         PRIMARY KEY (""Id"")
                     );
+                    --5.创建实体表
+                    CREATE TABLE IF NOT EXISTS ""Entity"" (
+                        ""Id"" NVARCHAR NOT NULL,
+                        ""Name"" NVARCHAR,
+                        ""Location"" NVARCHAR,
+                        ""Description"" NVARCHAR,
+                        ""Type"" integer,
+                        ""MId"" NVARCHAR NOT NULL,
+                        ""State"" integer,
+                        ""Characters"" NVARCHAR,
+                        ""_scriptCode"" integer,
+
+                        --等级相关
+                        ""Level"" integer,
+                        ""Exp"" integer,
+                        ""ExpMax"" integer,
+
+                        --战斗相关
+                        ""Power"" integer,
+                        ""Agile"" integer,
+                        ""HP"" integer,
+                        
+                        --地图移动相关
+                        ""_tallyMap"" integer,
+                        ""_tallyMapTep"" integer,
+                        ""MoveFeature"" integer,
+                        ""DestLocation"" NVARCHAR,
+
+                        --程序集
+                        ""AssemblyString"" NVARCHAR,
+                        ""TypeName"" NVARCHAR,
+
+                        PRIMARY KEY (""Id"")
+                    );
                     
                         --ALTER TABLE IotInfo  ADD COLUMN CollectorInfo TEXT;"
                     },

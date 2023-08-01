@@ -206,7 +206,7 @@ namespace AuraRevival.Business
                 var constructs = DBResponse.GetAllConstructs();
                 for (int i = 0; i < constructs.Count; i++)
                 {
-                    Msg(0, "Server", $"正在加载区块信息({i + 1}/{constructs.Count})");
+                    Msg(0, "Server", $"正在加载建筑信息({i + 1}/{constructs.Count})");
                     IConstruct _mtype = (IConstruct)Assembly.LoadFrom(constructs[i].AssemblyString).CreateInstance(constructs[i].TypeName);
                     _mtype.Resume(constructs[i]);
                     Grain.Instance.Constructs.Add(_mtype);
@@ -218,6 +218,24 @@ namespace AuraRevival.Business
                         block = NewBlock(_mtype.Location);
                     block.Constructs.Add(_mtype);
                 }
+
+                Msg(0, "Server", "正在加载实体信息...");
+                var entitys = DBResponse.GetAllEntitys();
+                for (int i = 0; i < entitys.Count; i++)
+                {
+                    Msg(0, "Server", $"正在加载实体信息({i + 1}/{entitys.Count})");
+                    IEntity _mtype = (IEntity)Assembly.LoadFrom(entitys[i].AssemblyString).CreateInstance(entitys[i].TypeName);
+                    _mtype.Resume(entitys[i]);
+                    Grain.Instance.Entities.Add(_mtype);
+
+                    Block block;
+                    if (Grain.Instance.Blocks.Any(x => x.Id == _mtype.Location))
+                        block = Grain.Instance.Blocks.Where(x => x.Id == _mtype.Location).FirstOrDefault();
+                    else
+                        block = NewBlock(_mtype.Location);
+                    block.Entities.Add(_mtype);
+                }
+
                 Msg(0, "Server", "进入游戏");
             }
             return;
@@ -292,6 +310,7 @@ namespace AuraRevival.Business
             DB.DBResponse.SaveMainGame(this);
             DB.DBResponse.SaveBlocks(Grain.Instance.Blocks);
             DB.DBResponse.SaveConstructs(Grain.Instance.Constructs);
+            DB.DBResponse.SaveEntitys(Grain.Instance.Entities);
             ProceedGame();
         }
 

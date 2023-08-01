@@ -86,7 +86,7 @@ namespace AuraRevival.Business.Construct
 
             //注册秒事件
             Grain.Instance.MainGame.SecondsEvent += SecondsEventExecute;
-            Grain.Instance.MainGame.SecondsEvent += MinutesEventExecute;
+            Grain.Instance.MainGame.MinutesEvent += MinutesEventExecute;
 
 
             _levelConfig = new Dictionary<int, Construct_Default>

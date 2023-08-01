@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AuraRevival.Business.Construct;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -65,12 +66,15 @@ namespace AuraRevival.Business.Entity
         /// 经验值（上限）
         /// </summary>
         int ExpMax { get; }
-
+        
+        #region 方法
         /// <summary>
         /// 增加经验
         /// </summary>
         /// <param name="exp"></param>
         void SetExp(int exp);
+        #endregion
+
         #endregion
 
 
@@ -87,11 +91,15 @@ namespace AuraRevival.Business.Entity
         /// 生命值
         /// </summary>
         int HP { get => HP; set => HP = value; }
-        void SetHP(int hp);
         /// <summary>
         /// 生命值（最大值）
         /// </summary>
         int HPMax { get => HPMax; set => HPMax = value; }
+
+        #region 方法
+        void SetHP(int hp);
+        #endregion
+
         #endregion
 
 
@@ -107,11 +115,12 @@ namespace AuraRevival.Business.Entity
         Point? DestLocation { get => DestLocation; set => DestLocation = value; }
         #endregion
 
-
+        #region 程序集
         /// <summary> 程序集 </summary>
         string AssemblyString { get => AssemblyString; set => AssemblyString = value; }
         /// <summary> 类型名称 </summary>
         string TypeName { get => TypeName; set => TypeName = value; }
+        #endregion
 
         /// <summary>
         /// 初始化
@@ -136,5 +145,12 @@ namespace AuraRevival.Business.Entity
         /// </summary>
         /// <param name="time"></param>
         void MinutesEventExecute(DateTime time) { }
+
+
+        /// <summary>
+        /// 恢复（重新启动）
+        /// </summary>
+        /// <param name="entity"></param>
+        void Resume(IEntity entity);
     }
 }

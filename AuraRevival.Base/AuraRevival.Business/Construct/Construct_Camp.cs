@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace AuraRevival.Business.Construct
 {
     /// <summary>
-    /// 基地(建筑)
+    /// 营地(建筑)
     /// </summary>
     public class Construct_Camp : Construct_Default
     {

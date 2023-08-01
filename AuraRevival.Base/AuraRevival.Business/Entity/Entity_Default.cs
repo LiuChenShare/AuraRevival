@@ -180,6 +180,11 @@ namespace AuraRevival.Business.Entity
 
         public virtual async Task SecondsEventExecute(DateTime time)
         {
+            if(Id.ToString() == "653e6ee0-f93c-4e0c-b1dd-32405a86f75a")
+            {
+
+            }
+
             if (State == EntityStateType.Die)
             {
                 Grain.Instance.MainGame.SecondsEvent -= SecondsEventExecute;
@@ -334,9 +339,9 @@ namespace AuraRevival.Business.Entity
             block_New?.AddEntities(this);
             block_Old?.Entities?.Remove(this);
 
-            MainGame.Instance.EntityMove(this, block_Old.Id, block_New.Id);
+            MainGame.Instance.EntityMove(this, block_Old?.Id, block_New?.Id);
 
-            _tallyMap--;
+            _tallyMap = _tallyMap - 1;
 
             return result;
         }
@@ -465,5 +470,40 @@ namespace AuraRevival.Business.Entity
             }
 
         }
+
+
+        public void Resume(IEntity entity)
+        {
+            Id = entity.Id;
+            Name = entity.Name;
+            Location = entity.Location;
+            Description = entity.Description;
+            Type = entity.Type;
+            MId = entity.MId;
+            State = entity.State;
+            Characters = entity.Characters;
+            _scriptCode = entity._scriptCode;
+            Level = entity.Level;
+            Exp = entity.Exp;
+            ExpMax = entity.ExpMax;
+            Power = entity.Power;
+            Agile = entity.Agile;
+            HP = entity.HP;
+            _tallyMap = entity._tallyMap;
+            _tallyMapTep = entity._tallyMapTep;
+            MoveFeature = entity.MoveFeature;
+            DestLocation = entity.DestLocation;
+            AssemblyString = entity.AssemblyString;
+            TypeName = entity.TypeName;
+
+
+            //注册秒事件
+            Grain.Instance.MainGame.SecondsEvent += SecondsEventExecute;
+            Grain.Instance.MainGame.MinutesEvent += MinutesEventExecute;
+
+            var aaaa = GetType().Module.Name;
+            var bbbb = GetType().FullName;
+        }
+
     }
 }
