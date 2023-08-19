@@ -78,9 +78,9 @@ namespace AuraRevival.Business.DB
             try
             {
                 //var sql_Get = $"Select * FROM MainGame WHERE Id='{mainGame.Id}';";
-                var sql_Get = "Select * FROM MainGame WHERE Id='@Id';";
+                var sql_Get = "Select * FROM MainGame WHERE Id=@Id;";
                 var sql_InsertOrUpdate = @"UPDATE MainGame SET GameState=@GameState, MapSize=@MapSize, GameDate=@GameDate WHERE Id=@Id;";
-                var aaa = conn.GetModelFromSql<MainGame>(sql_Get, new { Id=mainGame.Id })?.FirstOrDefault();
+                var aaa = conn.GetModelFromSql<MainGame>(sql_Get, new { Id=mainGame.Id.ToString() })?.FirstOrDefault();
                 if (aaa == null)//INSERT
                     sql_InsertOrUpdate = @"INSERT INTO MainGame(ID,GameState,MapSize,GameDate) VALUES (@Id, @GameState, @MapSize, @GameDate);";
 
@@ -220,7 +220,7 @@ namespace AuraRevival.Business.DB
                     var sql_Get = "Select * FROM Construct WHERE Id=@Id;";
                     var sql_InsertOrUpdate = @"UPDATE Construct SET Name=@Name, Description=@Description, Type=@Type, Level=@Level, Location=@Location, _tallyMap=@_tallyMap, _tallyMapTep=@_tallyMapTep,
                                                                     _scriptCode=@_scriptCode, AssemblyString=@AssemblyString, TypeName=@TypeName WHERE Id=@Id;";
-                    var aaa = conn.GetModelFromSql<IConstruct>(sql_Get, new { construct.Id })?.FirstOrDefault();
+                    var aaa = conn.GetModelFromSql<IConstruct>(sql_Get, new { Id =construct.Id.ToString() })?.FirstOrDefault();
                     if (aaa == null)//Update
                         sql_InsertOrUpdate = @"INSERT INTO Construct(Id, Name, Description, Type, Level, Location, _tallyMap, _tallyMapTep, _scriptCode, AssemblyString, TypeName)
                                                             VALUES (@Id, @Name, @Description, @Type, @Level, @Location, @_tallyMap, @_tallyMapTep, @_scriptCode, @AssemblyString, @TypeName);";
@@ -303,7 +303,7 @@ namespace AuraRevival.Business.DB
                                                                     Exp=@Exp, ExpMax=@ExpMax, Power=@Power, Agile=@Agile, HP=@HP, _tallyMap=@_tallyMap, _tallyMapTep=@_tallyMapTep, MoveFeature=@MoveFeature, DestLocation=@DestLocation, 
                                                                     AssemblyString=@AssemblyString, TypeName=@TypeName 
                                                                 WHERE Id=@Id;";
-                    var aaa = conn.GetModelFromSql<IConstruct>(sql_Get, new { entity.Id })?.FirstOrDefault();
+                    var aaa = conn.GetModelFromSql<IConstruct>(sql_Get, new { Id =entity.Id.ToString() })?.FirstOrDefault();
                     if (aaa == null)//Update
                         sql_InsertOrUpdate = @"INSERT INTO Entity(Id, Name, Location, Description, Type, MId, State, Characters, _scriptCode, Level, Exp, ExpMax, Power, Agile, HP, _tallyMap, _tallyMapTep,
                                                                     MoveFeature, DestLocation, AssemblyString, TypeName)
