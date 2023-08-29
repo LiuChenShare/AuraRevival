@@ -150,7 +150,7 @@ namespace AuraRevival.Business.DB
                 {
                     var sql_Get = "Select * FROM Block WHERE Id=@Id;";
                     var sql_InsertOrUpdate = @"UPDATE Block SET GameState=@GameState, MapSize=@MapSize, GameDate=@GameDate WHERE Id=@Id;";
-                    var aaa = conn.GetModelFromSql<MainGame>(sql_Get, new { Id = JsonSerializer.Serialize(block.Id) })?.FirstOrDefault();
+                    var aaa = conn.GetModelFromSql<Block>(sql_Get, new { Id = JsonSerializer.Serialize(block.Id) })?.FirstOrDefault();
                     if (aaa == null)//Update
                         sql_InsertOrUpdate = @"INSERT INTO Block(Id) VALUES (@Id);";
                     else
@@ -220,12 +220,11 @@ namespace AuraRevival.Business.DB
                     var sql_Get = "Select * FROM Construct WHERE Id=@Id;";
                     var sql_InsertOrUpdate = @"UPDATE Construct SET Name=@Name, Description=@Description, Type=@Type, Level=@Level, Location=@Location, _tallyMap=@_tallyMap, _tallyMapTep=@_tallyMapTep,
                                                                     _scriptCode=@_scriptCode, AssemblyString=@AssemblyString, TypeName=@TypeName WHERE Id=@Id;";
-                    var aaa = conn.GetModelFromSql<IConstruct>(sql_Get, new { Id =construct.Id.ToString() })?.FirstOrDefault();
+                    var aaa = conn.GetModelFromSql<Construct_Default>(sql_Get, new { Id =construct.Id.ToString() })?.FirstOrDefault();
                     if (aaa == null)//Update
                         sql_InsertOrUpdate = @"INSERT INTO Construct(Id, Name, Description, Type, Level, Location, _tallyMap, _tallyMapTep, _scriptCode, AssemblyString, TypeName)
                                                             VALUES (@Id, @Name, @Description, @Type, @Level, @Location, @_tallyMap, @_tallyMapTep, @_scriptCode, @AssemblyString, @TypeName);";
-                    else
-                        continue;
+                    
 
                     conn.Execute(sql_InsertOrUpdate,
                         new
@@ -269,7 +268,7 @@ namespace AuraRevival.Business.DB
 
             try
             {
-                var sql_Get = "Select * FROM Entity;";
+                var sql_Get = "Select * FROM Entity Where State!=2;";
                 //var aaa = conn.QueryFirstOrDefault<MainGame>(sql_Get);
                 var result = conn.GetModelFromSql<Entity_Default>(sql_Get);
                 return result;
@@ -303,14 +302,13 @@ namespace AuraRevival.Business.DB
                                                                     Exp=@Exp, ExpMax=@ExpMax, Power=@Power, Agile=@Agile, HP=@HP, _tallyMap=@_tallyMap, _tallyMapTep=@_tallyMapTep, MoveFeature=@MoveFeature, DestLocation=@DestLocation, 
                                                                     AssemblyString=@AssemblyString, TypeName=@TypeName 
                                                                 WHERE Id=@Id;";
-                    var aaa = conn.GetModelFromSql<IConstruct>(sql_Get, new { Id =entity.Id.ToString() })?.FirstOrDefault();
+                    var aaa = conn.GetModelFromSql<Entity_Default>(sql_Get, new { Id =entity.Id.ToString() })?.FirstOrDefault();
                     if (aaa == null)//Update
                         sql_InsertOrUpdate = @"INSERT INTO Entity(Id, Name, Location, Description, Type, MId, State, Characters, _scriptCode, Level, Exp, ExpMax, Power, Agile, HP, _tallyMap, _tallyMapTep,
                                                                     MoveFeature, DestLocation, AssemblyString, TypeName)
                                                             VALUES (@Id, @Name, @Location, @Description, @Type, @MId, @State, @Characters, @_scriptCode, @Level, @Exp, @ExpMax, @Power, @Agile, @HP, @_tallyMap, @_tallyMapTep, 
                                                                     @MoveFeature, @DestLocation, @AssemblyString, @TypeName);";
-                    else
-                        continue;
+                   
 
                     conn.Execute(sql_InsertOrUpdate,
                         new

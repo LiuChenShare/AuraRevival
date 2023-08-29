@@ -71,7 +71,7 @@ namespace AuraRevival.Business.Battle
         {
             var health = Entity.HP - hurt > 0 ? Entity.HP - hurt : 0;
 
-            Entity.SetHP(health);
+            Entity.RestockHP(hurt);
 
 
             Grain.Instance.MainGame.Msg(3, $"{Entity.Name}", $"当前HP{Entity.HP}");
@@ -89,6 +89,22 @@ namespace AuraRevival.Business.Battle
             {
                 if (FoeIds.Contains(id))
                     FoeIds.Remove(id);
+            }
+        }
+
+        /// <summary>
+        /// 增加敌人
+        /// </summary>
+        /// <param name="foeIds"></param>
+        public void AddFoeIds(List<Guid> foeIds)
+        {
+
+            foreach (var id in foeIds)
+            {
+                if (!FoeIds.Contains(id))
+                {
+                    FoeIds.Add(id);
+                }
             }
         }
 

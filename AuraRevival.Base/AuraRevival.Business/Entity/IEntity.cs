@@ -97,7 +97,11 @@ namespace AuraRevival.Business.Entity
         int HPMax { get => HPMax; set => HPMax = value; }
 
         #region 方法
-        void SetHP(int hp);
+        /// <summary>
+        /// 补充血量
+        /// </summary>
+        /// <param name="hurt"></param>
+        void RestockHP(int hurt);
         #endregion
 
         #endregion

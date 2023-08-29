@@ -41,7 +41,7 @@ namespace AuraRevival.Business
         /// <summary>
         /// 实体
         /// </summary>
-        public List<IEntity> Entities { get; set; } = new List<IEntity>();
+        public List<IEntity> Entities { get; private set; } = new List<IEntity>();
 
 
         public List<BattleRoom> BattleRooms { get; set; }  = new List<BattleRoom>();
@@ -66,6 +66,24 @@ namespace AuraRevival.Business
                     battleRoom.AddEntity(new List<IEntity>() { entity });
                 }
                 
+            }
+        }
+        public bool RemoveEntities(IEntity entity)
+        {
+            var battleRoom = BattleRooms.LastOrDefault(x => x.State == BattleStateType.InBattle);
+            if (battleRoom == null)
+            {
+                Entities.Remove(entity);
+                return true;
+            }
+            else
+            {
+                if (entity.State == EntityStateType.Die)
+                {
+                    Entities.Remove(entity);
+                    return true;
+                }
+                return false;
             }
         }
 

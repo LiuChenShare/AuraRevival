@@ -336,14 +336,15 @@ namespace AuraRevival.Business.Entity
 
             block_New ??= MainGame.Instance.NewBlock(Location);
 
-            block_New?.AddEntities(this);
-            block_Old?.Entities?.Remove(this);
-
-            MainGame.Instance.EntityMove(this, block_Old?.Id, block_New?.Id);
-
-            _tallyMap = _tallyMap - 1;
-
-            return result;
+            if (block_Old == null || (block_Old != null && block_Old.RemoveEntities(this)))
+            {
+                block_New?.AddEntities(this);
+                MainGame.Instance.EntityMove(this, block_Old?.Id, block_New?.Id);
+                _tallyMap = _tallyMap - 1;
+                return true;
+            }
+            else
+                return false;
         }
 
         /// <summary>
@@ -436,17 +437,19 @@ namespace AuraRevival.Business.Entity
         }
         #endregion
 
-        public virtual void SetHP(int hp)
+        public virtual void RestockHP(int hurt)
         {
-            HP = hp;
+            var health = HP - hurt > 0 ? HP - hurt : 0;
 
-            if (hp == 0)
+            HP = health;
+
+            if (health == 0)
             {
                 State = EntityStateType.Die;
 
                 Block block_New = Grain.Instance.Blocks.FirstOrDefault(x => x.Id == Location);
 
-                block_New?.Entities?.Remove(this);
+                block_New?.RemoveEntities(this);
 
                 MainGame.Instance.EntityMove(this, block_New.Id, null);
             }

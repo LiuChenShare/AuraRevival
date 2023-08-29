@@ -233,7 +233,7 @@ namespace AuraRevival.Business
                         block = Grain.Instance.Blocks.Where(x => x.Id == _mtype.Location).FirstOrDefault();
                     else
                         block = NewBlock(_mtype.Location);
-                    block.Entities.Add(_mtype);
+                    block.AddEntities(_mtype);
                 }
 
                 Msg(0, "Server", "进入游戏");

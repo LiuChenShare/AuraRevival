@@ -38,12 +38,25 @@ namespace AuraRevival.Business.Battle
 
         public void AddEntity(List<IEntity> entities)
         {
+            if (!BattleEntities.Any())//初始
+            {
+                Grain.Instance.MainGame.Msg(1, $"{BlockId}", $"{string.Join("、", entities.Select(x => x.Name))} 开始战斗");
+            }
+            else//中途加入
+            {
+                Grain.Instance.MainGame.Msg(1, $"{BlockId}", $"{string.Join("、", entities.Select(x => x.Name))} 加入战斗");
+            }
+
+            //现有的派系
+            var entities_old = BattleEntities.Select(x => x.Entity).ToList();
+            entities_old.AddRange(entities);
             List<Guid> mIds = entities.Select(x => x.MId).Distinct().ToList();
-            Dictionary<Guid,List<Guid>> group = new Dictionary<Guid,List<Guid>>();
+            Dictionary<Guid, List<Guid>> group = new Dictionary<Guid, List<Guid>>();
             foreach (var mid in mIds)
             {
-                group.Add(mid, entities.Where(x => x.MId != mid).Select(x => x.Id).ToList());
+                group.Add(mid, entities_old.Where(x => x.MId != mid).Select(x => x.Id).ToList());
             }
+            //加入战斗
             foreach (var entity in entities)
             {
                 BattleEntityInfo battleEntity = new BattleEntityInfo(entity, group[entity.MId]);
@@ -53,6 +66,17 @@ namespace AuraRevival.Business.Battle
                 //battleEntity.BattleEvent += async (object[] ar) => { };
 
                 battleEntity.BattleEvent += BattleEventExecute;
+            }
+            //给老人声明新加入的敌人
+            foreach (var entity in entities)
+            {
+                foreach (var en in BattleEntities)
+                {
+                    if (en.Entity.MId == entity.MId || en.Entity.State == EntityStateType.Die)
+                        continue;
+
+                    en.AddFoeIds(new List<Guid>() { entity.Id });
+                }
             }
         }
 
